@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from requests import post
 
@@ -22,6 +23,8 @@ class Post(models.Model):
     post_title = models.CharField(max_length=100, blank=False)
     post = models.ManyToManyField(Chapter,related_name='post', blank=True)
     chapter = models.ManyToManyField(Chapter,related_name='chapters', blank=True)
+    created_date = models.DateTimeField(auto_now=True)
+    last_modified_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.post_title
