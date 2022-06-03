@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserRegisterSerializer, PostSerializer
+from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer
 from .models import UserModel
 from post.models import Post
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -29,3 +29,9 @@ class GetUserPostsVIew(ListAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 # GET user POSTS and PAGES
+
+
+class CreatePostView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CreatePostSerializer
+    # queryset = Post.objects.all()
