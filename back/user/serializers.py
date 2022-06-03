@@ -1,7 +1,7 @@
-from pyexpat import model
 from rest_framework import serializers
 from rest_framework.response import Response
-from .models import UserModel
+from .models import Pages, Post, UserModel
+
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -23,3 +23,18 @@ class GetUserPostsSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('posts',)
         
+class PageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Pages
+        fields = ('id', 'page_title')
+
+
+class PostSerializer(serializers.ModelSerializer):
+    pages = PageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Post
+        fields = ('id', 'post_title', 'pages')
+
+
+

@@ -14,7 +14,7 @@ class Pages(models.Model):
     page_title = models.CharField(max_length=100, blank=False)
     text = models.TextField(blank=False)
     page = models.ForeignKey('self', on_delete=models.CASCADE, default=None,blank=True, null=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pages')#totally not confusing
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='pages')
     video = ''
     picture = ''
 
