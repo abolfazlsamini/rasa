@@ -21,11 +21,11 @@ class UserRegisterView(CreateAPIView):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }) 
-    # user get token after registering
+# user will get a token after registering
 
 
 class GetUserPostsVIew(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-    
+# GET user POSTS and PAGES
