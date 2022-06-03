@@ -30,3 +30,4 @@ class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
+#TODO: make it that it selecte the created post as one of the user's posts
