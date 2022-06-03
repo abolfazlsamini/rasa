@@ -24,6 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'post_title', 'pages')
 # GET user POSTS and PAGES
+#TODO: it ↑↑↑↑ dosen't show the foldering thing
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
