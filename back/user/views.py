@@ -34,4 +34,14 @@ class GetUserPostsVIew(ListAPIView):
 class CreatePostView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CreatePostSerializer
-    # queryset = Post.objects.all()
+    
+    def create(self, request, *args, **kwargs):
+        try:
+            data=request.data
+            post_title = data['post_title']
+            user = self.request.user
+            post = Post.objects.create(post_title = post_title)
+            user.posts.add(post.id)
+            return Response({'SUCCESS:': str(post_title)})
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
