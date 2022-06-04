@@ -1,4 +1,4 @@
-from user.views import UserRegisterView, GetUserPostsVIew, CreatePostView
+from user.views import UserRegisterView, GetUserPostsVIew, CreatePostView, CreatePageView
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -14,5 +14,7 @@ urlpatterns = [
     path('api/get-posts/', GetUserPostsVIew.as_view(), name='get_posts'),
     #POST: CREATE a POST:
     path('api/create-post/', CreatePostView.as_view(), name='create_post'),
+    #POST: CREATE a PAGE:
+    path('api/create-page/', CreatePageView.as_view(), name='create_page'),
 
 ]

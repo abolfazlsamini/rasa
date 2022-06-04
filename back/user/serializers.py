@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.response import Response
-from .models import Pages, Post, UserModel
-
+from .models import UserModel
+from post.models import Pages, Post
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,17 +17,22 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
-        fields = ('id', 'page_title')
+        fields = ('id', 'page_title', 'page')
 class PostSerializer(serializers.ModelSerializer):
     pages = PageSerializer(many=True, read_only=True)
     class Meta:
         model = Post
         fields = ('id', 'post_title', 'pages')
 # GET user POSTS and PAGES
-#TODO: it ↑↑↑↑ dosen't show the foldering thing
+
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-#TODO: make it that it select the created post as one of the user's posts Automaticly
+
+
+class CreatePageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pages
+        fields = '__all__'
