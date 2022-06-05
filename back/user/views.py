@@ -62,13 +62,13 @@ class CreatePageView(CreateAPIView):
             page_title = data['page_title']
             text = data['text']
             post_id = data['post']
-            try:
-                page_id = data['page']
+            page_id = data['page']
+            if page_id != 0:# is there a better way to do this? it check if a page should be under other pages
                 page = Pages.objects.get(id = page_id)
                 post = Post.objects.get(id = post_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
                 return Response({'SUCCESS:': str(page)})
-            except Exception as e:
+            else:
                 post = Post.objects.get(id = post_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post)
                 return Response({'SUCCESS:': str(page)})
