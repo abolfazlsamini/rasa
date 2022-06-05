@@ -61,17 +61,16 @@ class CreatePageView(CreateAPIView):
             data=request.data
             page_title = data['page_title']
             text = data['text']
-            page_id = data['page']
             post_id = data['post']
-            if page_id != None:
+            try:
+                page_id = data['page']
                 page = Pages.objects.get(id = page_id)
                 post = Post.objects.get(id = post_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
                 return Response({'SUCCESS:': str(page)})
-            else:
-                page = Pages.objects.get(id = page_id)
+            except Exception as e:
                 post = Post.objects.get(id = post_id)
-                page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
+                page = Pages.objects.create(page_title = page_title, text = text, post = post)
                 return Response({'SUCCESS:': str(page)})
 
         except Exception as e:
