@@ -12,7 +12,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = UserModel.objects.create_user(validated_data['username'], None,validated_data['password'])
         return user
-# User Register
+# POST: User Register
         
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,16 +23,22 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'post_title', 'pages')
-# GET user POSTS and PAGES
-
+# GET: GET user POSTS and PAGES
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-
+# POST: Create new post
 
 class CreatePageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
+        fields = '__all__'
+# POST: Create new page
+
+
+class UpdatePostTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
         fields = '__all__'

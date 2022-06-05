@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer, CreatePageSerializer
+from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer, CreatePageSerializer, UpdatePostTitleSerializer
 from .models import UserModel
 from post.models import Post, Pages
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -23,17 +23,12 @@ class UserRegisterView(CreateAPIView):
     }) 
 # user will get a token after registering
 
-
 class GetUserPostsVIew(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
-    def get(self, request, *args, **kwargs):
-
-        return 
 # GET user POSTS and PAGES
-
 
 class CreatePostView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -50,7 +45,6 @@ class CreatePostView(CreateAPIView):
         except Exception as e:
             return Response({'ERROR:': str(e)})
 # Create new Post
-
 
 class CreatePageView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -77,4 +71,19 @@ class CreatePageView(CreateAPIView):
             return Response({'ERROR:': str(e)})
 # Create new Page
 
+class UpdatePostTitle(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdatePostTitleSerializer
+    queryset = Post.objects.all()
 
+    def update(self, request, *args, **kwargs):
+        try:
+            user = self.request.user
+            data = request.data
+            post_id = data['id']
+            post_title = data['post_title']
+            post = user.posts.get(id=post_id)
+            user.posts.update(post_title=post_title)
+            return Response({'SUCCESS:': str(post_title)})
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
