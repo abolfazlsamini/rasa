@@ -33,7 +33,7 @@ class UserRegisterView(CreateAPIView):
 # user will get a token after registering
 
 class GetUserPostsVIew(ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 # GET user POSTS and PAGES
