@@ -1,7 +1,16 @@
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer, CreatePageSerializer, UpdatePostSerializer, UpdatePagesSerializer
+from .serializers import (
+UserRegisterSerializer, 
+PostSerializer, 
+CreatePostSerializer, 
+CreatePageSerializer, 
+UpdatePostSerializer, 
+UpdatePagesSerializer, 
+DeletePostSerializer,
+DeletePageSeriallizer
+)
 from .models import UserModel
 from post.models import Post, Pages
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -116,8 +125,45 @@ class UpdatePageVIew(UpdateAPIView):
                 return Response({'SUCCESS:': str(page_title)})
             else:
                 page.update(page_title=page_title, text=text, page=None)
-                return Response({'SUCCESS:': str('nulle?')})              
+                return Response({'SUCCESS:': str('nulle?')})
         except Exception as e:
             return Response({'ERROR:': str(e)})
 # Updates a Page
-            
+
+class DeletePostView(DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DeletePostSerializer
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            user = self.request.user
+            data = request.data
+            post_id = data['post_id']
+            post = user.posts.get(id = post_id)
+            post.delete()
+            return Response({'SUCCESS:': str(post)})
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
+# delete a post
+
+class DeletePageView(DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = DeletePageSeriallizer
+    queryset = Pages.objects.all()
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            user = self.request.user
+            data = request.data
+            post_id = data['post_id']
+            page_id = data['page_id']
+            post = user.posts.get(id = post_id)
+            page = post.pages.filter(id=page_id)
+            if not page:
+                return Response({'ERROR:': 'page not found'})
+            page.delete()
+            return Response({'SUCCESS:': str(page)})
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
+# delete page
+

@@ -47,3 +47,17 @@ class UpdatePagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
         fields = '__all__'
+# PATCH: update page
+
+class DeletePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+# DELETE: delete post
+
+class DeletePageSeriallizer(serializers.ModelSerializer):
+    class Meta:
+        model = Pages
+        fields = '__all__'
+# DELETE: delete page
+
