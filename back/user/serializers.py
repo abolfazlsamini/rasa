@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.response import Response
 from .models import UserModel
 from post.models import Pages, Post
 

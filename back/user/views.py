@@ -1,6 +1,9 @@
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from .models import UserModel
+from post.models import Post, Pages
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
 UserRegisterSerializer, 
 PostSerializer, 
@@ -11,9 +14,6 @@ UpdatePagesSerializer,
 DeletePostSerializer,
 DeletePageSeriallizer
 )
-from .models import UserModel
-from post.models import Post, Pages
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserRegisterView(CreateAPIView):

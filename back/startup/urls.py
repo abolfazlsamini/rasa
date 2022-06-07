@@ -1,3 +1,6 @@
+from django.contrib import admin
+from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from user.views import (
 UserRegisterView,
 GetUserPostsVIew,
@@ -8,9 +11,6 @@ UpdatePageVIew,
 DeletePostView,
 DeletePageView
 )
-from django.contrib import admin
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
