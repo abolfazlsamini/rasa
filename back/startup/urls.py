@@ -1,4 +1,4 @@
-from user.views import UserRegisterView, GetUserPostsVIew, CreatePostView, CreatePageView, UpdatePostTitle
+from user.views import UserRegisterView, GetUserPostsVIew, CreatePostView, CreatePageView, UpdatePostView, UpdatePageVIew
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -17,5 +17,7 @@ urlpatterns = [
     #POST: CREATE a PAGE:
     path('api/create-page/', CreatePageView.as_view(), name='create_page'),
     #PATCH: update post title:
-    path('api/update-post-title/', UpdatePostTitle.as_view(), name='update-post-title')
+    path('api/update-post/', UpdatePostView.as_view(), name='update-post'),
+    #PATCH: update page:
+    path('api/update-page/', UpdatePageVIew.as_view(), name='update-page')
 ]

@@ -37,8 +37,13 @@ class CreatePageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 # POST: Create new page
 
-
-class UpdatePostTitleSerializer(serializers.ModelSerializer):
+class UpdatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
+        fields = '__all__'
+# PATCH: update post_title
+
+class UpdatePagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pages
         fields = '__all__'

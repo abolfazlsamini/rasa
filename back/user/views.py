@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer, CreatePageSerializer, UpdatePostTitleSerializer
+from .serializers import UserRegisterSerializer, PostSerializer, CreatePostSerializer, CreatePageSerializer, UpdatePostSerializer, UpdatePagesSerializer
 from .models import UserModel
 from post.models import Post, Pages
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -27,7 +27,6 @@ class GetUserPostsVIew(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
-
 # GET user POSTS and PAGES
 
 class CreatePostView(CreateAPIView):
@@ -57,13 +56,15 @@ class CreatePageView(CreateAPIView):
             text = data['text']
             post_id = data['post']
             page_id = data['page']
-            if page_id != 0:# is there a better way to do this? it check if a page should be under other pages
-                page = Pages.objects.get(id = page_id)
-                post = Post.objects.get(id = post_id)
+            if page_id != "0":# is there a better way to do this? it check if a page should be under other pages
+                user = self.request.user
+                post = user.posts.get(id=post_id)
+                page = post.pages.filter(id=page_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
                 return Response({'SUCCESS:': str(page)})
             else:
-                post = Post.objects.get(id = post_id)
+                user = self.request.user
+                post = user.posts.get(id=post_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post)
                 return Response({'SUCCESS:': str(page)})
 
@@ -71,9 +72,9 @@ class CreatePageView(CreateAPIView):
             return Response({'ERROR:': str(e)})
 # Create new Page
 
-class UpdatePostTitle(UpdateAPIView):
+class UpdatePostView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = UpdatePostTitleSerializer
+    serializer_class = UpdatePostSerializer
     queryset = Post.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -82,8 +83,41 @@ class UpdatePostTitle(UpdateAPIView):
             data = request.data
             post_id = data['id']
             post_title = data['post_title']
-            post = user.posts.get(id=post_id)
-            user.posts.update(post_title=post_title)
+            post = user.posts.filter(id=post_id)
+            post.update(post_title=post_title)
             return Response({'SUCCESS:': str(post_title)})
         except Exception as e:
             return Response({'ERROR:': str(e)})
+# get id and updates the post_title
+
+class UpdatePageVIew(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdatePagesSerializer
+    queryset = Pages.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            page_id = data['page_id']
+            page_title = data['page_title']
+            text = data['text']
+            post_id = data['post_id']
+            folder_page_id = data['folder_page_id']
+            user = self.request.user
+            post = user.posts.get(id=post_id)
+            page = post.pages.filter(id=page_id)
+            if page_id == folder_page_id:
+                return Response({'ERROR:': str("Page cannot be child of itself")})
+            if not page:
+                return Response({'ERROR:': str("Page not found. page either does not exist or is not in the selected post")})
+            if folder_page_id != '0':
+                new_page = post.pages.get(id=folder_page_id)
+                page.update(page_title=page_title, text=text, page=new_page)
+                return Response({'SUCCESS:': str(page_title)})
+            else:
+                page.update(page_title=page_title, text=text, page=None)
+                return Response({'SUCCESS:': str('nulle?')})              
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
+# Updates a Page
+            
