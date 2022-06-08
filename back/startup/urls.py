@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from post.views import GetPostView
 from user.views import (
 UserRegisterView,
 GetUserPostsVIew,
@@ -14,6 +15,8 @@ DeletePageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #GET: get posts:
+    path('api/posts/',GetPostView.as_view(), name='posts'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
