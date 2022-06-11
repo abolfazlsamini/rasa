@@ -2,7 +2,7 @@
 function Login({ data }) {
     return (
         <>
-        <form action="" method="post">
+        <form action={'/api/login'} method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" />
             <label for="password">Password:</label>
