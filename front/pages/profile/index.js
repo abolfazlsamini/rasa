@@ -3,6 +3,7 @@ function Profile({ data }) {
     return (
         <>
         Profile index
+        {console.log(data)}
         </>
     )
 }

@@ -1,19 +1,18 @@
+import axios from 'axios';
+
+
 export default async(req, res) => {
 
     const body = {
-        username : "ramtin",
-        password : "123123123"
-    }
+        "username":"ramtin",
+        "password":"123123123"}
+    try {
+        const response = await axios.post('http://localhost:8000/api/token/', body);
+        console.log( response);
+        res.status(200).send(body)
+    } catch (error) {
+        console.log(error);
+        res.status(200).send("response")
+        }
 
-    console.log(JSON.stringify(body))
-    await fetch('http://localhost:8000/api/token/', {
-        method: 'POST',
-        header: {
-            'Content-Type': 'application/json',
-    },body: JSON.stringify(body)
-        
-    }).then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-    })
 }

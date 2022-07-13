@@ -1,8 +1,13 @@
 
+
+const handleSubmit = async (event) => {
+    event.preventDefault()
+}
+
 function Login({ data }) {
     return (
         <>
-        <form action={'/api/login'} method="post">
+        <form onsubmit='handleSubmit()' >
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" />
             <label for="password">Password:</label>
@@ -13,22 +18,22 @@ function Login({ data }) {
     )
 }
 
-function post(){
-    fetch('/api/token', {
-        method: 'POST',
-        body: JSON.stringify(objectWithData),
-      })
-}
+// function post(){
+//     fetch('/api/token', {
+//         method: 'POST',
+//         body: JSON.stringify(objectWithData),
+//       })
+// }
 
-// This gets called on every request
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const res = await fetch(`http://localhost:8000/api/get-posts/`)
-    const data = await res.json()
+// // This gets called on every request
+// export async function getServerSideProps() {
+//     // Fetch data from external API
+//     const res = await fetch(`http://localhost:8000/api/get-posts/`)
+//     const data = await res.json()
   
-    // Pass data to the page via props
-    return { props: { data } }
-  }
+//     // Pass data to the page via props
+//     return { props: { data } }
+//   }
   
   
   
