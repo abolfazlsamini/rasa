@@ -1,17 +1,36 @@
+import login from '../../components/login'
 
 
-const handleSubmit = async (event) => {
-    event.preventDefault()
-}
+function Logiin({ data }) {
+    const handleSubmit = async (event) => {
+        const username = document.querySelector('#username').value
+        const password = document.querySelector('#password').value
+        event.preventDefault()
+        if (validateData(username,password)){
 
-function Login({ data }) {
+            const body = {
+                'username': username,
+                'password': password
+            }
+            const respons = login(body)
+            console.log(respons)
+        }
+    }
+    function validateData(username,password){
+        if (!username || !password) {
+            alert("username or password field can't be empty")
+            return false
+        }
+        else return true
+
+    }
     return (
         <>
-        <form onsubmit='handleSubmit()' >
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" />
-            <label for="password">Password:</label>
-            <input type="text" id="password" name="password" />
+        <form onSubmit={handleSubmit} >
+            <label htmlFor="username">Username:</label>
+            <input type="username" id="username" name="username" />
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" name="password" />
             <button type="submit">Submit</button>
         </form>
         </>
@@ -37,4 +56,4 @@ function Login({ data }) {
   
   
   
-  export default Login
+  export default Logiin
