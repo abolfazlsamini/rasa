@@ -1,6 +1,5 @@
 import axios from 'axios';
 import cookie from 'cookie';
-import { serialize } from "cookie";
 
 export default async(req, res) => {
 

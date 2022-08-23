@@ -1,10 +1,7 @@
 import styles from '../styles/Home.module.css'
-import cookie from 'cookie';
 
 function Home({ data }) {
-  var setCookie = cookie.serialize('foo', 'bsdfar');
-  var cookies = cookie.parse('foo=bar; equation=E%3Dmc%5E2');
-  console.log(data)
+
   return (
     <>
     

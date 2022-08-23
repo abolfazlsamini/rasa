@@ -8,11 +8,6 @@ function Profile({ data }) {
     )
 }
 
-
-
-
-
-
 // This gets called on every request
 export async function getServerSideProps() {
     // Fetch data from external API
