@@ -1,4 +1,4 @@
-import login from '../../components/login'
+import login from '../api/login'
 import cookie from 'cookie'
 
 function Logiin({ data }) {

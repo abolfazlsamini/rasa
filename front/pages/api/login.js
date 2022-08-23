@@ -4,9 +4,7 @@ import { serialize } from "cookie";
 
 export default async(req, res) => {
 
-    const body = {
-        "username":"ramtin",
-        "password":"123123123"}
+    const body = req.body
     try {
 
         const response = await axios.post('http://localhost:8000/api/token/', body);
