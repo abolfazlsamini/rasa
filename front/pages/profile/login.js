@@ -1,4 +1,3 @@
-import login from '../api/login'
 import cookie from 'cookie'
 
 function Logiin({ data }) {
@@ -46,23 +45,5 @@ function Logiin({ data }) {
     )
 }
 
-// function post(){
-//     fetch('/api/token', {
-//         method: 'POST',
-//         body: JSON.stringify(objectWithData),
-//       })
-// }
-
-// // This gets called on every request
-// export async function getServerSideProps() {
-//     // Fetch data from external API
-//     const res = await fetch(`http://localhost:8000/api/get-posts/`)
-//     const data = await res.json()
   
-//     // Pass data to the page via props
-//     return { props: { data } }
-//   }
-  
-  
-  
-  export default Logiin
+export default Logiin
