@@ -31,15 +31,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 AUTH_USER_MODEL = 'user.UserModel'
-
+CORS_ALLOW_CREDENTIALS = True
 INSTALLED_APPS = [
     'user',
     'post',
     'corsheaders',
+    'rest_framework_simplejwt',
     'rest_framework',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +61,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://192.168.1.2:3000'
+]
 ROOT_URLCONF = 'startup.urls'
 
 TEMPLATES = [
@@ -95,6 +100,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 # Password validation

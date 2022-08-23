@@ -1,7 +1,8 @@
 import login from '../../components/login'
-
+import cookie from 'cookie'
 
 function Logiin({ data }) {
+    var setCookie = cookie.serialize('foo', 'bar');
     const handleSubmit = async (event) => {
         const username = document.querySelector('#username').value
         const password = document.querySelector('#password').value
@@ -12,7 +13,15 @@ function Logiin({ data }) {
                 'username': username,
                 'password': password
             }
-            const respons = login(body)
+            // const respons = login(body)
+            const respons = await fetch('../api/login',{
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers:{
+                    'Content-Type': 'application/json',
+                    'Access': 'application/json'
+                        },
+        })
             console.log(respons)
         }
     }

@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import UserModel
@@ -36,6 +37,14 @@ class GetUserPostsVIew(ListAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+
+    # def get(self, request):
+    #     try:
+    #         user = self.request.user
+    #         posts = user.posts.all().values('id', 'post_title', 'created_date', 'last_modified_date')
+    #         return JsonResponse(list(posts), safe=False)
+    #     except Exception as e:
+    #         return Response({'ERROR:': str(e)})
 # GET user POSTS and PAGES
 
 class CreatePostView(CreateAPIView):

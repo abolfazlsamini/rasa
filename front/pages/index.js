@@ -1,11 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-
+import cookie from 'cookie';
 
 function Home({ data }) {
+  var setCookie = cookie.serialize('foo', 'bsdfar');
+  var cookies = cookie.parse('foo=bar; equation=E%3Dmc%5E2');
+  console.log(data)
   return (
     <>
+    
       <div className={styles.Home}>
         {
           data.map(posts =>
@@ -13,7 +15,7 @@ function Home({ data }) {
               return(
               <>
                 {posts.post_title}:<br/>
-                {posts.pages.map(pages =>{
+                {posts.pages?.map(pages =>{
                   {return (
                     <>
                       {pages.page_title}<br/>
