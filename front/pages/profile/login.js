@@ -1,28 +1,23 @@
-import cookie from 'cookie'
+import router from 'next/router';
+import {login} from '../../actions/auth'
+import { useSelector, useDispatch } from 'react-redux';
 
-function Logiin({ data }) {
-    var setCookie = cookie.serialize('foo', 'bar');
+function Login() {
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
+    console.log(isAuthenticated)
+    if (typeof window !== 'undefined' && isAuthenticated)
+        router.push('/profile');
+
     const handleSubmit = async (event) => {
         const username = document.querySelector('#username').value
         const password = document.querySelector('#password').value
         event.preventDefault()
-        if (validateData(username,password)){
+        if(validateData(username, password)){
 
-            const body = {
-                'username': username,
-                'password': password
-            }
-            // const respons = login(body)
-            const respons = await fetch('../api/login',{
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers:{
-                    'Content-Type': 'application/json',
-                    'Access': 'application/json'
-                        },
-        })
-            console.log(respons)
+            dispatch(login(username, password));
         }
+
     }
     function validateData(username,password){
         if (!username || !password) {
@@ -39,11 +34,11 @@ function Logiin({ data }) {
             <input type="username" id="username" name="username" />
             <label htmlFor="password">Password:</label>
             <input type="password" id="password" name="password" />
-            <button type="submit">Submit</button>
+            <button type="submit">Login</button>
         </form>
         </>
     )
 }
 
   
-export default Logiin
+export default Login
