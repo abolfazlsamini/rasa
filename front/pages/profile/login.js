@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function Login() {
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
-    console.log(isAuthenticated)
+
     if (typeof window !== 'undefined' && isAuthenticated)
         router.push('/profile');
 
