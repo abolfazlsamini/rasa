@@ -4,7 +4,7 @@ function Home({ data }) {
   return (
     <>
       <div className={styles.Home}>
-        {data.map((posts) => {
+        {data?.map((posts) => {
           return (
             <>
               {posts.post_title}:<br />

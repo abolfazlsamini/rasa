@@ -1,4 +1,5 @@
 import router from "next/router";
+import StateManage from "../../components/stateManage";
 import { login } from "../../actions/auth";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -26,6 +27,7 @@ function Login() {
   }
   return (
     <>
+      <StateManage />
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input type="username" id="username" name="username" />

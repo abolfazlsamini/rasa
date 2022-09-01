@@ -45,9 +45,8 @@ export const verify = () => async (dispatch) => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: body,
     });
-
+    console.log("verifying");
     if (res.status === 200) {
       dispatch({
         type: AUTHORIZED_SUCCESS,
