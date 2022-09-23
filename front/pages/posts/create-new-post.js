@@ -1,68 +1,83 @@
-import axios from "axios";
 import StateManage from "../../components/stateManage";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { verify } from "../../actions/auth";
-function post({ data }) {
+
+function post() {
+  const [data, setData] = useState([]);
   const router = useRouter();
-  const dispatch = useDispatch();
+  StateManage(); //this is just a useEffect to verify token
   const isAuthenticated = useSelector(
     (state) => state.authReducer.isAuthenticated
   );
-  if (!isAuthenticated) dispatch(verify());
-  if (typeof window !== "undefined" && !isAuthenticated) {
+  if (typeof window !== "undefined" && !isAuthenticated)
     router.push("/profile/login");
-  }
 
-  function pageView(id) {
-    data?.map((posts) => {
-      if (posts.id === id) {
-        return (
-          <>
-            {posts.pages?.map((pages) => {
-              {
+  // i spend a lot of time on this so much that i forgot that i don't even need this function :(
+  function parser() {
+    getData().then((data) => {
+      console.log(
+        Object.values(data)[0].map((posts) => {
+          return posts.pages?.map((pages) => {
+            return pages.page_title;
+          });
+        })
+      );
+    });
+  }
+  useEffect(() => {
+    getData().then((data) => {
+      setData(Object.values(data)[0]);
+    });
+  }, []);
+  if (!isAuthenticated) return <></>;
+  return (
+    <>
+      <form>
+        {data?.map((posts) => {
+          return (
+            <fieldset>
+              <legend>
+                <a href="#" title="Go to post's edit page">
+                  {posts.post_title}
+                </a>
+              </legend>
+              {posts.pages?.map((pages) => {
                 return (
                   <>
-                    {pages.page_title}
+                    <a href="#" title={pages.page_title}>
+                      {pages.page_title}
+                    </a>
                     <br />
                   </>
                 );
-              }
-            })}
-            <br />
-          </>
-        );
-      } else return null;
-    });
-  }
-  return (
-    <>
-      <StateManage />
-      {data?.map((posts) => {
-        return (
-          <div className="treeview w-20 border">
-            <ul className="list-group">
-              <li className="list-group-item">
-                <input
-                  className="form-check-input me-1"
-                  type="radio"
-                  name="listGroupRadio"
-                  value=""
-                  id="firstRadio"
-                  checked
-                  pageView
-                />
-                <label className="form-check-label" htmlFor="firstRadio">
-                  {posts.post_title}
-                </label>
-              </li>
-            </ul>
-          </div>
-        );
-      })}
+              })}
+            </fieldset>
+          );
+        })}
+      </form>
     </>
   );
-}
 
+  async function getData() {
+    try {
+      const res = await fetch("/api/posts/get-posts", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.status === 200) {
+        return res.json();
+      } else {
+        return "failed to get posts";
+      }
+    } catch (err) {
+      console.log(err);
+      return "something went wrong trying to get posts";
+    }
+  }
+}
 export default post;

@@ -13,12 +13,12 @@ export default async (req, res) => {
     }
     const headers = {
       headers: {
-        "Test-Header": "test-value",
+        access: access,
       },
     };
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/token/verify/",
+      const response = await axios.get(
+        "http://localhost:8000/api/get-posts/",
         headers
       );
       if (response.status === 200) {
