@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "../styles/Home.module.css";
+import styles from "./Navbar.module.css";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../actions/auth";

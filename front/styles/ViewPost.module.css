@@ -1,0 +1,43 @@
+.CreatePost fieldset{
+    background-color: black;
+    width: 200px;
+
+}
+.CreatePost {
+    border: 200;
+    
+}
+.PostTitle {
+    background-color: rgb(255, 255, 255);
+    padding: 6px;
+    word-break: break-word; 
+    color:maroon;
+    text-decoration: none;
+}
+.PageTitle {
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+}
+.PageTitle:active {
+    background-color: rgb(255, 0, 0);
+    padding: 5px;
+}
+.PostTitle:active {
+    background-color: rgb(255, 0, 0);
+    
+}
+.CreateNewPage{
+    background-color: gray;
+    padding: 6px;
+}
+.CreatePost button:hover{
+    cursor:pointer;
+    background-color: darkgray;
+}
+.CreatePost button:active{
+    cursor:pointer;
+    background-color: lightgray;
+}
