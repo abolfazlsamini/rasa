@@ -8,7 +8,7 @@
     
 }
 .PostTitle {
-    background-color: rgb(255, 255, 255);
+    background-color: white;
     padding: 6px;
     word-break: break-word; 
     color:maroon;
@@ -20,10 +20,16 @@
     font-size: large;
     text-decoration: none;
     line-height: 200%;
+    padding: 0px;
 }
+.pageList {
+    list-style-type: none;
+    padding: 0px;
+}
+
 .PageTitle:active {
     background-color: rgb(255, 0, 0);
-    padding: 5px;
+    padding: 7px;
 }
 .PostTitle:active {
     background-color: rgb(255, 0, 0);

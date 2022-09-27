@@ -15,15 +15,13 @@ export const createNewPageAPI = async (page_title, text, page, post) => {
       },
       body: body,
     });
-
+    const data = await res.json();
     if (res.status === 200) {
-      console.log(res.json());
-      return res;
+      return data;
     } else {
-      return { failed: res };
+      return data;
     }
   } catch (err) {
-    console.log(err);
-    return { failed: err };
+    return err;
   }
 };

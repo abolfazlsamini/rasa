@@ -79,12 +79,12 @@ class CreatePageView(CreateAPIView):
                 post = user.posts.get(id=post_id)
                 page = post.pages.filter(id=page_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
-                return Response({'SUCCESS:': str(page.id)})
+                return Response(str(page.id))
             else:
                 user = self.request.user
                 post = user.posts.get(id=post_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post)
-                return Response({'SUCCESS:': str(page.id)})
+                return Response(str(page.id))
 
         except Exception as e:
             return Response({'ERROR:': str(e)})
