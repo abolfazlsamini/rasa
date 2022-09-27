@@ -77,7 +77,7 @@ class CreatePageView(CreateAPIView):
             if page_id != "0":# is there a better way to do this? it check if a page should be under other pages
                 user = self.request.user
                 post = user.posts.get(id=post_id)
-                page = post.pages.filter(id=page_id)
+                page = post.pages.get(id=page_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
                 return Response(str(page.id))
             else:

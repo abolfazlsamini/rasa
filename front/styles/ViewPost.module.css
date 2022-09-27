@@ -27,8 +27,17 @@
     padding: 0px;
 }
 
-.PageTitle:active {
+.PageTitleIsActive {
     background-color: rgb(255, 0, 0);
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+    padding: 7px;
+}
+.PageTitle:active {
+    background-color: rgb(187, 129, 129);
     padding: 7px;
 }
 .PostTitle:active {
