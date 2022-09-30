@@ -41,7 +41,9 @@ function Profile() {
                   return (
                     <>
                       <a
-                        className={styles.PageTitle}
+                        className={
+                          pages.page === null ? styles.Parent : styles.Children
+                        }
                         href=""
                         onClick={(event) => event.preventDefault()}
                         title={pages.page_title}

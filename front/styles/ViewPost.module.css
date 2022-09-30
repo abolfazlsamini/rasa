@@ -1,33 +1,27 @@
 .CreatePost fieldset{
     background-color: black;
     width: 200px;
+    float: left;
 
-}
-.CreatePost {
-    border: 200;
-    
-}
-.PostTitle {
-    background-color: white;
-    padding: 6px;
-    word-break: break-word; 
-    color:maroon;
-    text-decoration: none;
-}
-.PageTitle {
-    color: white;
-    word-break: break-word; 
-    font-size: large;
-    text-decoration: none;
-    line-height: 200%;
-    padding: 0px;
 }
 .pageList {
     list-style-type: none;
     padding: 0px;
 }
+.CreatePost {
+    border: 200px;
+    
+}
 
-.PageTitleIsActive {
+.Parent{
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+    padding: 0px;
+}
+.ParentIsActive{
     background-color: rgb(255, 0, 0);
     color: white;
     word-break: break-word; 
@@ -36,14 +30,59 @@
     line-height: 200%;
     padding: 7px;
 }
-.PageTitle:active {
-    background-color: rgb(187, 129, 129);
+.Children{
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+    padding: 0px;
+    margin-left: 15px;
+}
+.ChildrenIsActive{
+    background-color: rgb(255, 0, 0);
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+    padding: 7px;
+    margin-left: 15px;
+}
+
+
+
+/* Input field */
+.pageTitleInputField{
+    width: 110px;
+    height: 23px;
+}
+.pageTitleInputFieldEmpty{
+    width: 110px;
+    height: 23px;
+    border: 3px solid red;
+}
+
+/* Post Title */
+.PostTitleIsActive {
+    background-color: rgb(255, 0, 0);
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
     padding: 7px;
 }
-.PostTitle:active {
-    background-color: rgb(255, 0, 0);
-    
+.PostTitle {
+    color: white;
+    word-break: break-word; 
+    font-size: large;
+    text-decoration: none;
+    line-height: 200%;
+    padding: 0px;
 }
+
+/* button*/
 .CreateNewPage{
     background-color: gray;
     padding: 6px;
@@ -55,4 +94,10 @@
 .CreatePost button:active{
     cursor:pointer;
     background-color: lightgray;
+}
+/*  Textarea   */
+
+.Textarea fieldset {
+    height: 600px;
+    width: 800px;
 }
