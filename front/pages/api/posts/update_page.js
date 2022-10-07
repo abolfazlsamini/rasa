@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "cookie";
 
 export default async (req, res) => {
-  if (req.method === "GET") {
+  if (req.method === "PATCH") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
@@ -11,14 +11,16 @@ export default async (req, res) => {
         error: "User forbidden from making the request",
       }); //TODO dispatch verify maybe?
     }
+    const body = req.body;
     const headers = {
       headers: {
         Authorization: "Bearer " + access,
       },
     };
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/get-posts/",
+      const response = await axios.patch(
+        "http://localhost:8000/api/update-page/",
+        body,
         headers
       );
       if (response.status === 200) {
@@ -30,8 +32,5 @@ export default async (req, res) => {
       // TODO: eather fix axios or fix fetch for not working saing bad request
       return res.status(401).json({ error: err });
     }
-  } else {
-    res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
 };

@@ -3,13 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "../../styles/ViewPost.module.css";
-import { createNewPageAPI } from "../../actions/post";
+import { createNewPageAPI, updatePageAPI } from "../../actions/post";
 import { logout } from "../../actions/auth";
 
 function postFunction() {
   const dispatch = useDispatch();
   const [postData, setPostData] = useState([]);
   const [textInput, setTextInput] = useState("");
+  const [pageTitleInput, setPageTitleInput] = useState("");
+  const [bigTextInput, setBigTextInput] = useState("");
   const [selectedPage, setSelectedPage] = useState("0");
   const [apiParent, setApiParent] = useState("0");
   // const router = useRouter();
@@ -23,7 +25,7 @@ function postFunction() {
   // if (!isAuthenticated) return <></>;
 
   function makeNewPage(pageName) {
-    const res = createNewPageAPI(pageName, "text", apiParent, "69").then(
+    const res = createNewPageAPI(pageName, "", apiParent, "69").then(
       (response) => {
         if (response.success != null && response.success != undefined) {
           const newArray = [...postData];
@@ -68,7 +70,32 @@ function postFunction() {
       makeNewPage(textInput);
     setTextInput(""); // clears text input field after submitting
   }
-  const ThePages = (prop) => {
+  function handleSave(event) {
+    event.preventDefault();
+    updatePageAPI(selectedPage, pageTitleInput, bigTextInput, "69").then(
+      (res) => {
+        if (res.success) {
+          const newArray = [...postData];
+          const selectedPageIndex = newArray.findIndex(
+            (child) => child.id === selectedPage
+          );
+          newArray.splice(selectedPageIndex, 1, {
+            id: newArray[selectedPageIndex].id,
+            pageTitle: pageTitleInput,
+            parent: newArray[selectedPageIndex].parent,
+          });
+          setPostData(newArray);
+        } else {
+          console.error("Couldn't Update page");
+        }
+      }
+    );
+  }
+  function handleDelete(event) {
+    event.preventDefault();
+  }
+
+  const ThePages = () => {
     return (
       <ul className={styles.pageList}>
         <li key={"0"}>
@@ -77,6 +104,7 @@ function postFunction() {
             onClick={(event) => {
               event.preventDefault();
               setSelectedPage("0");
+              setPageTitleInput("");
             }}
             className={
               "0" != selectedPage ? styles.PostTitle : styles.PostTitleIsActive
@@ -93,7 +121,7 @@ function postFunction() {
                 onClick={(event) => {
                   event.preventDefault();
                   setSelectedPage(pages.id);
-
+                  setPageTitleInput(pages.pageTitle);
                   if (pages.id === "0") {
                     setApiParent(pages.id);
                   } else {
@@ -122,7 +150,35 @@ function postFunction() {
       </ul>
     );
   };
+  const Textarea = () => {
+    return (
+      <div className={styles.Textarea}>
+        <form>
+          <fieldset>
+            <input
+              value={pageTitleInput}
+              onChange={(e) => {
+                setPageTitleInput(e.target.value);
+              }}
+              placeholder="Page Title"
+            />
 
+            <br />
+            <textarea
+              value={bigTextInput}
+              placeholder="Text"
+              onChange={(e) => {
+                setBigTextInput(e.target.value);
+              }}
+            />
+            <br />
+            <button onClick={handleSave}>Save</button>
+            <button onClick={handleDelete}>Delete</button>
+          </fieldset>
+        </form>
+      </div>
+    );
+  };
   return (
     <div className={styles.CreatePost}>
       <form>
@@ -151,6 +207,7 @@ function postFunction() {
           <ThePages />
         </fieldset>
       </form>
+      {Textarea()}
     </div>
   );
 }

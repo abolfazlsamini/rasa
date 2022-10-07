@@ -1,6 +1,6 @@
 .CreatePost fieldset{
     background-color: black;
-    width: 200px;
+    width: 20%;
     float: left;
 
 }
@@ -54,12 +54,12 @@
 
 /* Input field */
 .pageTitleInputField{
-    width: 110px;
-    height: 23px;
+    height: 30px;
+    width: 65%;
 }
 .pageTitleInputFieldEmpty{
-    width: 110px;
-    height: 23px;
+    height: 30px;
+    width: 65%;
     border: 3px solid red;
 }
 
@@ -83,7 +83,7 @@
 }
 
 /* button*/
-.CreateNewPage{
+.CreatePost button{
     background-color: gray;
     padding: 6px;
 }
@@ -98,6 +98,24 @@
 /*  Textarea   */
 
 .Textarea fieldset {
-    height: 600px;
-    width: 800px;
+    height: 100%;
+    width: 72%;
+}
+.Textarea textarea {
+    height: 500px;
+    width: 95%;
+    resize: none;
+    
+}
+.Textarea input {
+    height: 30px;
+    width: 95%;
+    resize: none;
+    margin-bottom: 16px;
+    
+}
+.Textarea button {
+    float: right;
+    margin: 5px;
+    
 }

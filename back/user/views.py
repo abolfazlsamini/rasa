@@ -1,12 +1,13 @@
 from rest_framework.response import Response
 from django.http import JsonResponse
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import UserModel
 from post.models import Post, Pages
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
 UserRegisterSerializer, 
+PageDetailSerializer, 
 PostSerializer, 
 CreatePostSerializer, 
 CreatePageSerializer, 
@@ -30,7 +31,7 @@ class UserRegisterView(CreateAPIView):
         return Response({
         'refresh': str(refresh),
         'access': str(refresh.access_token),
-    }) 
+    },status=200) 
 # user will get a token after registering
 
 class GetUserPostsVIew(ListAPIView):
@@ -47,6 +48,21 @@ class GetUserPostsVIew(ListAPIView):
     #         return Response({'ERROR:': str(e)})
 # GET user POSTS and PAGES
 
+class GetUserPageView(RetrieveAPIView):
+    serializer_class = PageDetailSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, *arg, **kwargs):
+        try:
+            data = request.data
+            page_id = data['id']
+            post_id = data['post']
+            user = self.request.user
+            post = user.posts.get(id=post_id)
+            page = post.pages.get(id=page_id)
+            return Response({'page_title':str(page.page_title),'text':str(page.text)})
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=400)
 class CreatePostView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CreatePostSerializer
@@ -60,7 +76,7 @@ class CreatePostView(CreateAPIView):
             user.posts.add(post.id)
             return Response({'SUCCESS:': str(post.id)})
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # Create new Post
 
 class CreatePageView(CreateAPIView):
@@ -87,7 +103,7 @@ class CreatePageView(CreateAPIView):
                 return Response(str(page.id))
 
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # Create new Page
 
 class UpdatePostView(UpdateAPIView):
@@ -105,7 +121,7 @@ class UpdatePostView(UpdateAPIView):
             post.update(post_title=post_title)
             return Response({'SUCCESS:': str(post_title)})
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # get id and updates the post_title
 
 class UpdatePageVIew(UpdateAPIView):
@@ -116,27 +132,19 @@ class UpdatePageVIew(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         try:
             data = request.data
+            post_id = data['post_id']
             page_id = data['page_id']
             page_title = data['page_title']
             text = data['text']
-            post_id = data['post_id']
-            folder_page_id = data['folder_page_id']
             user = self.request.user
             post = user.posts.get(id=post_id)
+            page = post.pages.get(id=page_id)
+            parent = page.page
             page = post.pages.filter(id=page_id)
-            if page_id == folder_page_id:
-                return Response({'ERROR:': str("Page cannot be child of itself")})
-            if not page:
-                return Response({'ERROR:': str("Page not found. page either does not exist or is not in the selected post")})
-            if folder_page_id != '0':
-                new_page = post.pages.get(id=folder_page_id)
-                page.update(page_title=page_title, text=text, page=new_page)
-                return Response({'SUCCESS:': str(page_title)})
-            else:
-                page.update(page_title=page_title, text=text, page=None)
-                return Response({'SUCCESS:': str('nulle?')})
+            page.update(page_title=page_title, text=text, page=parent)
+            return Response({'SUCCESS:': str(page_title)})
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # Updates a Page
 
 class DeletePostView(DestroyAPIView):
@@ -152,7 +160,7 @@ class DeletePostView(DestroyAPIView):
             post.delete()
             return Response({'SUCCESS:': str(post)})
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # delete a post
 
 class DeletePageView(DestroyAPIView):
@@ -173,6 +181,6 @@ class DeletePageView(DestroyAPIView):
             page.delete()
             return Response({'SUCCESS:': str(page)})
         except Exception as e:
-            return Response({'ERROR:': str(e)})
+            return Response({'ERROR:': str(e)},status=400)
 # delete page
 

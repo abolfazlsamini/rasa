@@ -24,6 +24,10 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'post_title', 'pages')
 # GET: GET user POSTS and PAGES
 
+class PageDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('id', 'post')
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -45,7 +49,7 @@ class UpdatePostSerializer(serializers.ModelSerializer):
 class UpdatePagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
-        fields = '__all__'
+        fields = ('id', 'page_title', 'text', 'post')
 # PATCH: update page
 
 class DeletePostSerializer(serializers.ModelSerializer):

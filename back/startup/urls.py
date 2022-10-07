@@ -5,6 +5,7 @@ from post.views import GetPostView
 from user.views import (
 UserRegisterView,
 GetUserPostsVIew,
+GetUserPageView, 
 CreatePostView,
 CreatePageView,
 UpdatePostView,
@@ -17,6 +18,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #GET: get posts:
     path('api/posts/',GetPostView.as_view(), name='posts'),
+    path('api/pages/',GetUserPageView.as_view(), name='pages'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

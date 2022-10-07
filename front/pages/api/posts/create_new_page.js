@@ -9,7 +9,7 @@ export default async (req, res) => {
     if (access === false) {
       return res.status(403).json({
         error: "User forbidden from making the request",
-      });
+      }); //TODO dispatch verify maybe?
     }
     const body = req.body;
     const headers = {
