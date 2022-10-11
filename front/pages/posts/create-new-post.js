@@ -3,7 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "../../styles/ViewPost.module.css";
-import { createNewPageAPI, updatePageAPI } from "../../actions/post";
+import {
+  createNewPageAPI,
+  deletePageAPI,
+  updatePageAPI,
+} from "../../actions/post";
 import { logout } from "../../actions/auth";
 
 function postFunction() {
@@ -27,13 +31,18 @@ function postFunction() {
   function makeNewPage(pageName) {
     const res = createNewPageAPI(pageName, "", apiParent, "69").then(
       (response) => {
-        if (response.success != null && response.success != undefined) {
+        if (
+          response.success &&
+          response.success != null &&
+          response.success != undefined
+        ) {
           const newArray = [...postData];
           if (selectedPage === "0") {
             newArray.splice(postData.length, 0, {
               id: response.success,
               pageTitle: pageName,
               parent: selectedPage,
+              text: "",
             });
           } else {
             const parentId = newArray.findIndex(
@@ -45,12 +54,14 @@ function postFunction() {
                 id: response.success,
                 pageTitle: pageName,
                 parent: parentNum,
+                text: "",
               });
             } else {
               newArray.splice(parentId + 1, 0, {
                 id: response.success,
                 pageTitle: pageName,
                 parent: selectedPage,
+                text: "",
               });
             }
           }
@@ -72,27 +83,42 @@ function postFunction() {
   }
   function handleSave(event) {
     event.preventDefault();
-    updatePageAPI(selectedPage, pageTitleInput, bigTextInput, "69").then(
-      (res) => {
-        if (res.success) {
-          const newArray = [...postData];
-          const selectedPageIndex = newArray.findIndex(
-            (child) => child.id === selectedPage
-          );
-          newArray.splice(selectedPageIndex, 1, {
-            id: newArray[selectedPageIndex].id,
-            pageTitle: pageTitleInput,
-            parent: newArray[selectedPageIndex].parent,
-          });
-          setPostData(newArray);
-        } else {
-          console.error("Couldn't Update page");
+    if (selectedPage != "0") {
+      updatePageAPI(selectedPage, pageTitleInput, bigTextInput, "69").then(
+        (res) => {
+          if (res.success) {
+            const newArray = [...postData];
+            const selectedPageIndex = newArray.findIndex(
+              (child) => child.id === selectedPage
+            );
+            newArray.splice(selectedPageIndex, 1, {
+              id: newArray[selectedPageIndex].id,
+              pageTitle: pageTitleInput,
+              parent: newArray[selectedPageIndex].parent,
+              text: bigTextInput,
+            });
+            setPostData(newArray);
+          } else {
+            console.error("Couldn't Update page");
+          }
         }
-      }
-    );
+      );
+    } else console.error("No page was selected");
   }
   function handleDelete(event) {
     event.preventDefault();
+    deletePageAPI("69", "540").then((res) => {
+      console.log(res);
+      if (res.success && res.success != null && res.success != undefined) {
+        const newArray = [...postData];
+        const selectedPageIndex = newArray.findIndex(
+          (child) => child.id === selectedPage
+        );
+        newArray.splice(selectedPageIndex, 1);
+        setPostData(newArray);
+        setSelectedPage("0");
+      } else console.error("error", res);
+    });
   }
 
   const ThePages = () => {
@@ -105,6 +131,7 @@ function postFunction() {
               event.preventDefault();
               setSelectedPage("0");
               setPageTitleInput("");
+              setBigTextInput("");
             }}
             className={
               "0" != selectedPage ? styles.PostTitle : styles.PostTitleIsActive
@@ -122,6 +149,7 @@ function postFunction() {
                   event.preventDefault();
                   setSelectedPage(pages.id);
                   setPageTitleInput(pages.pageTitle);
+                  setBigTextInput(pages.text);
                   if (pages.id === "0") {
                     setApiParent(pages.id);
                   } else {

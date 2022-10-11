@@ -49,6 +49,7 @@ class GetUserPostsVIew(ListAPIView):
 # GET user POSTS and PAGES
 
 class GetUserPageView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = PageDetailSerializer
     queryset = Post.objects.all()
 
@@ -164,23 +165,25 @@ class DeletePostView(DestroyAPIView):
 # delete a post
 
 class DeletePageView(DestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     serializer_class = DeletePageSeriallizer
     queryset = Pages.objects.all()
     
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         try:
             user = self.request.user
             data = request.data
-            post_id = data['post_id']
             page_id = data['page_id']
+            post_id = data['post_id']
+            return Response({"ah"},status=406)
             post = user.posts.get(id = post_id)
-            page = post.pages.filter(id=page_id)
+            page = post.pages.get(id=page_id)
             if not page:
-                return Response({'ERROR:': 'page not found'})
+                return Response({'ERROR:': 'page not found'},status=404)
             page.delete()
-            return Response({'SUCCESS:': str(page)})
+            return Response({'SUCCESS:': str(page.page_title)})
         except Exception as e:
-            return Response({'ERROR:': str(e)},status=400)
+            print(str(e))
+            return Response({'ERROR:': str(e)},status=402)
 # delete page
 

@@ -61,6 +61,6 @@ class DeletePostSerializer(serializers.ModelSerializer):
 class DeletePageSeriallizer(serializers.ModelSerializer):
     class Meta:
         model = Pages
-        fields = '__all__'
+        fields = ("page_id", "post_id")
 # DELETE: delete page
 

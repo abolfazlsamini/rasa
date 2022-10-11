@@ -23,7 +23,7 @@ export default async (req, res) => {
       );
       if (response.status === 200) {
         return res.status(200).json({ success: response.data });
-      }
+      } else return res.status(401).json({ error: response.data });
     } catch (err) {
       // i know that this 401 unauthorized should be in the try part but axios raise an error for anything
       // other than 200 and the fetch just dosen't work so here we are

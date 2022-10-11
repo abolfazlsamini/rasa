@@ -53,3 +53,30 @@ export const updatePageAPI = async (page_id, page_title, text, post_id) => {
     return err;
   }
 };
+
+export const deletePageAPI = async (page_id, post_id) => {
+  const body = JSON.stringify({
+    page_id,
+    post_id,
+  });
+
+  try {
+    console.log(body);
+    const res = await fetch("/api/posts/delete_page", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+    const data = await res.json();
+    if (res.status === 200) {
+      return data;
+    } else {
+      return data;
+    }
+  } catch (err) {
+    return err;
+  }
+};

@@ -2,24 +2,25 @@ import axios from "axios";
 import cookie from "cookie";
 
 export default async (req, res) => {
-  if (req.method === "PATCH") {
+  if (req.method === "DELETE") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
     if (access === false) {
       return res.status(403).json({
         error: "User forbidden from making the request",
-      }); //TODO dispatch verify maybe?
+      }); //TODO dispatch verify or something?
     }
     const body = req.body;
     const headers = {
       headers: {
         Authorization: "Bearer " + access,
+        "Content-Length": "0",
       },
     };
     try {
-      const response = await axios.patch(
-        "http://localhost:8000/api/update-page/",
+      const response = await axios.delete(
+        "http://localhost:8000/api/delete-page/",
         body,
         headers
       );
@@ -30,7 +31,8 @@ export default async (req, res) => {
       // i know that this 401 unauthorized should be in the try part but axios raise an error for anything
       // other than 200 and the fetch just dosen't work so here we are
       // TODO: eather fix axios or fix fetch for not working saing bad request
-      return res.status(401).json({ error: err });
+
+      return res.status(401).json({ errrrrror: err });
     }
   }
 };
