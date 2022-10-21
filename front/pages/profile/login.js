@@ -3,7 +3,7 @@ import StateManage from "../../components/stateManage";
 import { login } from "../../actions/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../actions/auth";
-
+import swal from "sweetalert";
 function Login() {
   StateManage(); //this is just a useEffect to verify token
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function Login() {
   };
   function validateData(username, password) {
     if (!username || !password) {
-      alert("username or password field can't be empty");
+      swal("username or password field can't be empty", "error");
       return false;
     } else return true;
   }

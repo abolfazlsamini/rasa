@@ -6,6 +6,7 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
 } from "./types";
+import swal from "sweetalert";
 
 export const login = (username, password) => async (dispatch) => {
   const body = JSON.stringify({
@@ -31,12 +32,14 @@ export const login = (username, password) => async (dispatch) => {
       dispatch({
         type: LOGIN_FAIL,
       });
+      swal("loggin failed", "couldn't log you in", "error");
     }
   } catch (err) {
     console.log(err);
     dispatch({
       type: LOGIN_FAIL,
     });
+    swal("loggin failed", "couldn't log you in", "error");
   }
 };
 export const verify = () => async (dispatch) => {
@@ -79,11 +82,21 @@ export const logout = () => async (dispatch) => {
       dispatch({
         type: LOGOUT_FAIL,
       });
+      swal(
+        "logout faild!",
+        "idk man even i'm suprised how'd this happend, you shouldn't have even seen this",
+        "error"
+      );
     }
   } catch (err) {
     console.log(err);
     dispatch({
       type: LOGOUT_FAIL,
     });
+    swal(
+      "logout faild!",
+      "idk man even i'm suprised how'd this happend, you shouldn't have even seen this",
+      "error"
+    );
   }
 };

@@ -168,14 +168,12 @@ class DeletePageView(DestroyAPIView):
     # permission_classes = (IsAuthenticated,)
     serializer_class = DeletePageSeriallizer
     queryset = Pages.objects.all()
-    
-    def destroy(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         try:
             user = self.request.user
             data = request.data
             page_id = data['page_id']
             post_id = data['post_id']
-            return Response({"ah"},status=406)
             post = user.posts.get(id = post_id)
             page = post.pages.get(id=page_id)
             if not page:

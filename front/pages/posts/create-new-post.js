@@ -9,8 +9,13 @@ import {
   updatePageAPI,
 } from "../../actions/post";
 import { logout } from "../../actions/auth";
+import swal from "sweetalert";
 
 function postFunction() {
+  const router = useRouter();
+  const postId = router.query.id;
+  const postTitle = router.query.PostTitle;
+
   const dispatch = useDispatch();
   const [postData, setPostData] = useState([]);
   const [textInput, setTextInput] = useState("");
@@ -18,18 +23,18 @@ function postFunction() {
   const [bigTextInput, setBigTextInput] = useState("");
   const [selectedPage, setSelectedPage] = useState("0");
   const [apiParent, setApiParent] = useState("0");
-  // const router = useRouter();
-  // StateManage(); //this is just a useEffect to verify token
-  // const isAuthenticated = useSelector(
-  //   (state) => state.authReducer.isAuthenticated
-  // );
-  // if (typeof window !== "undefined" && !isAuthenticated)
-  //   router.push("/profile/login");
+  StateManage(); //this is just a useEffect to verify token
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
+  if (typeof window !== "undefined" && !isAuthenticated)
+    router.push("/profile/login");
 
-  // if (!isAuthenticated) return <></>;
+  if (!isAuthenticated) return <></>;
+  if (postTitle !== "undefined" && !postTitle) return <></>;
 
   function makeNewPage(pageName) {
-    const res = createNewPageAPI(pageName, "", apiParent, "69").then(
+    const res = createNewPageAPI(pageName, "", apiParent, postId).then(
       (response) => {
         if (
           response.success &&
@@ -70,21 +75,26 @@ function postFunction() {
           // TODO if it's 403 this should happen not just for anything
           // if (dispatch && dispatch !== null && dispatch !== undefined)
           //   dispatch(logout());
-          console.error("error", response);
+          swal(
+            "couldn't create a page",
+            "something went wrong creating the page try logging in again see if that'll help",
+            "error"
+          );
         }
       }
     );
   }
   function handleSubmit(event) {
     event.preventDefault();
-    if (textInput && textInput != null && textInput != undefined)
+    if (textInput && textInput != null && textInput != undefined) {
       makeNewPage(textInput);
-    setTextInput(""); // clears text input field after submitting
+      setTextInput(""); // clears text input field after submitting
+    } else swal("page title can't be empty");
   }
   function handleSave(event) {
     event.preventDefault();
     if (selectedPage != "0") {
-      updatePageAPI(selectedPage, pageTitleInput, bigTextInput, "69").then(
+      updatePageAPI(selectedPage, pageTitleInput, bigTextInput, postId).then(
         (res) => {
           if (res.success) {
             const newArray = [...postData];
@@ -99,26 +109,31 @@ function postFunction() {
             });
             setPostData(newArray);
           } else {
-            console.error("Couldn't Update page");
+            swal(
+              "Couldn't Update page",
+              "something went wrong went updating the page",
+              "error"
+            );
           }
         }
       );
-    } else console.error("No page was selected");
+    } else swal("No page was selected");
   }
   function handleDelete(event) {
     event.preventDefault();
-    deletePageAPI("69", "540").then((res) => {
-      console.log(res);
-      if (res.success && res.success != null && res.success != undefined) {
-        const newArray = [...postData];
-        const selectedPageIndex = newArray.findIndex(
-          (child) => child.id === selectedPage
-        );
-        newArray.splice(selectedPageIndex, 1);
-        setPostData(newArray);
-        setSelectedPage("0");
-      } else console.error("error", res);
-    });
+    // deletePageAPI("69", "540").then((res) => {
+    //   console.log(res);
+    //   if (res.success && res.success != null && res.success != undefined) {
+    //     const newArray = [...postData];
+    //     const selectedPageIndex = newArray.findIndex(
+    //       (child) => child.id === selectedPage
+    //     );
+    //     newArray.splice(selectedPageIndex, 1);
+    //     setPostData(newArray);
+    //     setSelectedPage("0");
+    //   } else console.error("error", res);
+    // });
+    swal("yeah... this button dosn't work yet");
   }
 
   const ThePages = () => {
@@ -137,7 +152,7 @@ function postFunction() {
               "0" != selectedPage ? styles.PostTitle : styles.PostTitleIsActive
             }
           >
-            Post Title
+            {postTitle}
           </a>
         </li>
         {postData.map((pages) => {
@@ -226,7 +241,7 @@ function postFunction() {
                 : styles.pageTitleInputField
             }
             value={textInput}
-            placeholder={"page name"}
+            placeholder={"Page Title"}
             onChange={(e) => {
               setTextInput(e.target.value);
             }}
