@@ -78,8 +78,23 @@ function postFunction() {
           swal(
             "couldn't create a page",
             "something went wrong creating the page try logging in again see if that'll help",
-            "error"
-          );
+            "error",
+            {
+              buttons: {
+                login: "login",
+                cancel: "cancel",
+              },
+            }
+          ).then((value) => {
+            switch (value) {
+              case "login":
+                router.push({
+                  pathname: "/profile/login",
+                  query: { redirect: "posts/create-new-post-name" },
+                });
+                break;
+            }
+          });
         }
       }
     );
@@ -114,9 +129,24 @@ function postFunction() {
             } else {
               swal(
                 "Couldn't Update page",
-                "something went wrong went updating the page",
-                "error"
-              );
+                "something went wrong went updating the page, if this keeps happening try logging in again",
+                "error",
+                {
+                  buttons: {
+                    login: "login",
+                    cancel: "cancel",
+                  },
+                }
+              ).then((value) => {
+                switch (value) {
+                  case "login":
+                    router.push({
+                      pathname: "/profile/login",
+                      query: { redirect: "posts/create-new-post-name" },
+                    });
+                    break;
+                }
+              });
             }
           }
         );

@@ -40,8 +40,23 @@ function postTitleFunction() {
           swal(
             "welp it didnt work!",
             "something happend while trying to make a new post, try logging in dipshit",
-            "error"
-          );
+            "error",
+            {
+              buttons: {
+                login: "login",
+                cancel: "cancel",
+              },
+            }
+          ).then((value) => {
+            switch (value) {
+              case "login":
+                router.push({
+                  pathname: "/profile/login",
+                  query: { redirect: "posts/create-new-post-name" },
+                });
+                break;
+            }
+          });
       });
     else
       swal("TOO Short!", "post title is too shot just like your dick", "error");
