@@ -12,7 +12,10 @@ function Profile() {
     (state) => state.authReducer.isAuthenticated
   );
   if (typeof window !== "undefined" && !isAuthenticated)
-    router.push("/profile/login");
+    router.push({
+      pathname: "/profile/login",
+      query: { redirect: "profile" },
+    });
 
   useEffect(() => {
     getData().then((data) => {

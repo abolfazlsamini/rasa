@@ -94,29 +94,32 @@ function postFunction() {
   function handleSave(event) {
     event.preventDefault();
     if (selectedPage != "0") {
-      updatePageAPI(selectedPage, pageTitleInput, bigTextInput, postId).then(
-        (res) => {
-          if (res.success) {
-            const newArray = [...postData];
-            const selectedPageIndex = newArray.findIndex(
-              (child) => child.id === selectedPage
-            );
-            newArray.splice(selectedPageIndex, 1, {
-              id: newArray[selectedPageIndex].id,
-              pageTitle: pageTitleInput,
-              parent: newArray[selectedPageIndex].parent,
-              text: bigTextInput,
-            });
-            setPostData(newArray);
-          } else {
-            swal(
-              "Couldn't Update page",
-              "something went wrong went updating the page",
-              "error"
-            );
+      if (!pageTitleInput || pageTitleInput === "")
+        swal("Couldn't Update page", "page title ccan't be empty", "error");
+      else
+        updatePageAPI(selectedPage, pageTitleInput, bigTextInput, postId).then(
+          (res) => {
+            if (res.success) {
+              const newArray = [...postData];
+              const selectedPageIndex = newArray.findIndex(
+                (child) => child.id === selectedPage
+              );
+              newArray.splice(selectedPageIndex, 1, {
+                id: newArray[selectedPageIndex].id,
+                pageTitle: pageTitleInput,
+                parent: newArray[selectedPageIndex].parent,
+                text: bigTextInput,
+              });
+              setPostData(newArray);
+            } else {
+              swal(
+                "Couldn't Update page",
+                "something went wrong went updating the page",
+                "error"
+              );
+            }
           }
-        }
-      );
+        );
     } else swal("No page was selected");
   }
   function handleDelete(event) {

@@ -14,7 +14,10 @@ function postTitleFunction() {
     (state) => state.authReducer.isAuthenticated
   );
   if (typeof window !== "undefined" && !isAuthenticated)
-    router.push("/profile/login");
+    router.push({
+      pathname: "/profile/login",
+      query: { redirect: "posts/create-new-post-name" },
+    });
 
   if (!isAuthenticated) return <></>;
 
