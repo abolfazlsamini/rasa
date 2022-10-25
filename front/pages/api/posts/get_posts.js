@@ -18,7 +18,7 @@ export default async (req, res) => {
     };
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/get-posts/",
+        "http://localhost:8000/api/posts/",
         headers
       );
       if (response.status === 200) {
