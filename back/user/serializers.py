@@ -16,12 +16,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pages
-        fields = ('id', 'page_title', 'page')
+        fields = ('id', 'page_title', 'page', 'text')
 class PostSerializer(serializers.ModelSerializer):
     pages = PageSerializer(many=True, read_only=True)
+    text = PageSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ('id', 'post_title', 'pages')
+        fields = ('id', 'post_title', 'pages', 'text')
 # GET: GET user POSTS and PAGES
 
 class PageDetailSerializer(serializers.ModelSerializer):

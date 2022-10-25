@@ -58,8 +58,7 @@ function postTitleFunction() {
             }
           });
       });
-    else
-      swal("TOO Short!", "post title is too shot just like your dick", "error");
+    else swal("TOO Short!", "post title is too short", "error");
   }
   return (
     <div>

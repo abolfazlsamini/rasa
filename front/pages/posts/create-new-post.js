@@ -10,7 +10,7 @@ import {
 } from "../../actions/post";
 import { logout } from "../../actions/auth";
 import swal from "sweetalert";
-
+import { LOGIN_FAIL } from "../../actions/types";
 function postFunction() {
   const router = useRouter();
   const postId = router.query.id;
@@ -166,6 +166,7 @@ function postFunction() {
     //     setSelectedPage("0");
     //   } else console.error("error", res);
     // });
+
     swal("yeah... this button dosn't work yet");
   }
 

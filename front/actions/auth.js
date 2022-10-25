@@ -57,6 +57,9 @@ export const verify = () => async (dispatch) => {
         type: AUTHORIZED_SUCCESS,
       });
     } else {
+      // dispatch({
+      //   type: AUTHORIZED_FAIL,
+      // });
       dispatch(logout());
     }
   } catch (err) {
@@ -84,7 +87,7 @@ export const logout = () => async (dispatch) => {
       });
       swal(
         "logout faild!",
-        "idk man even i'm suprised how'd this happend, you shouldn't have even seen this",
+        "idk man even i'm suprised how'd this happend, you shouldn't have been able to seen this",
         "error"
       );
     }
