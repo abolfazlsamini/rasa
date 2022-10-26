@@ -2,7 +2,7 @@ import router from "next/router";
 import StateManage from "../../components/stateManage";
 import { login } from "../../actions/auth";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../actions/auth";
+import styles from "../../styles/login.module.css";
 import swal from "sweetalert";
 import { useRouter } from "next/router";
 
@@ -35,12 +35,12 @@ function Login() {
   };
   function validateData(username, password) {
     if (!username || !password) {
-      swal("username or password field can't be empty", "error");
+      swal("Can't login", "username or password field can't be empty", "error");
       return false;
     } else return true;
   }
   return (
-    <>
+    <div className={styles.form}>
       {/* <StateManage /> */}
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
@@ -49,7 +49,7 @@ function Login() {
         <input type="password" id="password" name="password" />
         <button type="submit">Login</button>
       </form>
-    </>
+    </div>
   );
 }
 

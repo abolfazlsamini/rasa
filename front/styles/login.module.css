@@ -1,0 +1,35 @@
+.form{
+    font-size: large;
+    position: absolute;
+    left: calc(50% - 125px);
+    width: 100px;
+    height: 100px;
+    margin-top: 25px;
+}
+.form input{
+    padding: 10px;
+    width: 250px;
+    height: 30px;
+    font-size: large;
+    border-radius: 100px;
+
+}
+.form button{
+    background-color:rgb(26,101,41);
+    color: white;
+    font-size: large;
+    width: 270px;
+    height: 45px;
+    border-radius: 100px;
+    margin-top: 10px;
+}
+.form button:hover{
+    background-color:rgba(26, 101, 41, 0.89);
+    color: white;
+    font-size: large;
+    width: 270px;
+    height: 45px;
+    border-radius: 100px;
+    margin-top: 10px;
+    
+}

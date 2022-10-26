@@ -282,6 +282,7 @@ function postFunction() {
           />
           <br />
           <ThePages />
+          {console.table(postData)}
         </fieldset>
       </form>
       {Textarea()}

@@ -20,9 +20,10 @@ class PageSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     pages = PageSerializer(many=True, read_only=True)
     text = PageSerializer(many=True, read_only=True)
+    pages_set = PageSerializer(read_only=True)
     class Meta:
         model = Post
-        fields = ('id', 'post_title', 'pages', 'text')
+        fields = ('id', 'post_title', 'pages', 'text', 'pages_set')
 # GET: GET user POSTS and PAGES
 
 class PageDetailSerializer(serializers.ModelSerializer):
