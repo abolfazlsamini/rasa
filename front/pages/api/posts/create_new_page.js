@@ -19,7 +19,7 @@ export default async (req, res) => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/create-page/",
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/create-page/`,
         body,
         headers
       );

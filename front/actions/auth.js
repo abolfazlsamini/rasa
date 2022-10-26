@@ -35,11 +35,11 @@ export const login = (username, password) => async (dispatch) => {
       swal("loggin failed", "couldn't log you in", "error");
     }
   } catch (err) {
+    swal("loggin failed", "couldn't log you in", "error");
     console.log(err);
     dispatch({
       type: LOGIN_FAIL,
     });
-    swal("loggin failed", "couldn't log you in", "error");
   }
 };
 export const verify = () => async (dispatch) => {
@@ -57,6 +57,7 @@ export const verify = () => async (dispatch) => {
         type: AUTHORIZED_SUCCESS,
       });
     } else {
+      console.log("elseeeeeee");
       // dispatch({
       //   type: AUTHORIZED_FAIL,
       // });

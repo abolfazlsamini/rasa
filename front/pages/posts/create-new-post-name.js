@@ -1,25 +1,26 @@
 import Link from "next/link";
 import { useState } from "react";
-import styles from "../../styles/ViewPost.module.css";
 import { createNewPostAPI } from "../../actions/post";
 import { useRouter } from "next/router";
 import swal from "sweetalert";
 import StateManage from "../../components/stateManage";
 import { useSelector } from "react-redux";
+import styles from "../../styles/create-new-post-name.module.css";
+
 function postTitleFunction() {
   const [postTitle, setPostTitle] = useState("");
   const router = useRouter();
-  StateManage(); //this is just a useEffect to verify token
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
-  if (typeof window !== "undefined" && !isAuthenticated)
-    router.push({
-      pathname: "/profile/login",
-      query: { redirect: "posts/create-new-post-name" },
-    });
+  // StateManage(); //this is just a useEffect to verify token
+  // const isAuthenticated = useSelector(
+  //   (state) => state.authReducer.isAuthenticated
+  // );
+  // if (typeof window !== "undefined" && !isAuthenticated)
+  //   router.push({
+  //     pathname: "/profile/login",
+  //     query: { redirect: "posts/create-new-post-name" },
+  //   });
 
-  if (!isAuthenticated) return <></>;
+  // if (!isAuthenticated) return <></>;
 
   function onChangeHandler(event) {
     event.preventDefault();
@@ -61,20 +62,19 @@ function postTitleFunction() {
     else swal("TOO Short!", "post title is too short", "error");
   }
   return (
-    <div>
-      <form>
-        Enter your post title:
-        <input
-          className={styles.pageTitleInputField}
-          type="text"
-          onChange={onChangeHandler}
-          value={postTitle}
-        />
-        <button className={styles.CreateNewPage} onClick={onclickHandler}>
-          create
-        </button>
-      </form>
-    </div>
+    <form className={styles.form}>
+      <input
+        className={styles.pageTitleInputField}
+        type="text"
+        placeholder="Post Title"
+        onChange={onChangeHandler}
+        value={postTitle}
+      />
+      <br />
+      <button className={styles.CreateNewPage} onClick={onclickHandler}>
+        Create New Post
+      </button>
+    </form>
   );
 }
 export default postTitleFunction;

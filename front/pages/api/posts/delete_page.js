@@ -20,7 +20,7 @@ export default async (req, res) => {
     };
     try {
       const response = await axios.delete(
-        "http://localhost:8000/api/delete-page/",
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/delete-page/`,
         body,
         headers
       );

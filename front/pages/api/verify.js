@@ -17,7 +17,7 @@ export default async (req, res) => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/token/verify/",
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/token/verify/`,
         body
       );
       if (response.status === 200) {

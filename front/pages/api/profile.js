@@ -7,7 +7,7 @@ export default async (res, req) => {
   if (req.method === "GET") {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/token/",
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/token/`,
         body
       );
     } catch (error) {}

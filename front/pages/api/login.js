@@ -4,19 +4,22 @@ import cookie from "cookie";
 export default async (req, res) => {
   const body = req.body;
   try {
-    const response = await axios.post("http://localhost:8000/api/token/", body);
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACK_URL}/api/token/`,
+      body
+    );
     if (response.status === 200) {
       res.setHeader("Set-Cookie", [
         cookie.serialize("access", response.data.access, {
           httpOnly: true,
           maxAge: 60 * 60,
-          secure: true,
+          secure: false,
           sameSite: "strict",
           path: "/",
         }),
         cookie.serialize("refresh", response.data.refresh, {
           httpOnly: true,
-          secure: true,
+          secure: false,
           maxAge: 60 * 60 * 24,
           sameSite: "strict",
           path: "/",

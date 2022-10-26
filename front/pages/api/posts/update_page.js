@@ -19,7 +19,7 @@ export default async (req, res) => {
     };
     try {
       const response = await axios.patch(
-        "http://localhost:8000/api/update-page/",
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/update-page/`,
         body,
         headers
       );
