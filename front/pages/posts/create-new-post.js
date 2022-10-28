@@ -28,15 +28,15 @@ function postFunction() {
   const [selectedPage, setSelectedPage] = useState("0");
   const [apiParent, setApiParent] = useState("0");
 
-  StateManage(); //this is just a useEffect to verify token
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
-  if (typeof window !== "undefined" && !isAuthenticated)
-    router.push("/profile/login");
+  // StateManage(); //this is just a useEffect to verify token
+  // const isAuthenticated = useSelector(
+  //   (state) => state.authReducer.isAuthenticated
+  // );
+  // if (typeof window !== "undefined" && !isAuthenticated)
+  //   router.push("/profile/login");
 
-  if (!isAuthenticated) return <></>;
-  if (postTitle !== "undefined" && !postTitle) return <></>;
+  // if (!isAuthenticated) return <></>;
+  // if (postTitle !== "undefined" && !postTitle) return <></>;
 
   useEffect(() => {
     if (router.isReady) {
