@@ -5,6 +5,9 @@ import { logout } from "../../actions/auth";
 import styles from "../../styles/profile.module.css";
 import { useState, useEffect } from "react";
 import swal from "sweetalert";
+import Image from "next/image";
+import editImage from ".././../public/edit.png";
+
 function Profile() {
   const [data, setData] = useState([]);
   const router = useRouter();
@@ -31,25 +34,34 @@ function Profile() {
           {data?.map((posts) => {
             return (
               <ul className={styles.PostList}>
-                <li
-                  id={posts.id}
-                  href=""
-                  onClick={(event) => {
-                    event.preventDefault();
-                    swal(
-                      "it doesn't work for now this is the post id: " + posts.id
-                    );
-                  }}
-                  title="Edit This Post"
-                >
-                  <div className={styles.PostTitle}>{posts.post_title}</div>
+                <li id={posts.id} href="">
+                  <div className={styles.PostTitle}>{posts.post_title}</div>{" "}
+                  <Image
+                    title="Edit This Post"
+                    className={styles.image}
+                    src={editImage}
+                    alt="Picture of the author"
+                    width={50}
+                    height={50}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      router.push({
+                        pathname: "/posts/create-new-post",
+                        query: {
+                          PostTitle: posts.post_title,
+                          id: posts.id,
+                          isNew: false,
+                        },
+                      });
+                    }}
+                  />
                   <br />
                   <div className={styles.Date}>
                     Created In: {posts.created_date.slice(0, 4)}/
                     {posts.created_date.slice(5, 7)}/
                     {posts.created_date.slice(8, 10)} At:{" "}
-                    {posts.created_date.slice(14, 16)}:
-                    {posts.created_date.slice(17, 19)}
+                    {posts.created_date.slice(11, 13)}:
+                    {posts.created_date.slice(14, 16)}
                   </div>
                 </li>
               </ul>

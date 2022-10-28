@@ -8,30 +8,44 @@ import {
   deletePageAPI,
   updatePageAPI,
 } from "../../actions/post";
+
 import { logout } from "../../actions/auth";
 import swal from "sweetalert";
 import { LOGIN_FAIL } from "../../actions/types";
+import editPost from "./edit-post";
 function postFunction() {
   const router = useRouter();
   const postId = router.query.id;
   const postTitle = router.query.PostTitle;
+  const isNew = router.query.isNew;
 
   const dispatch = useDispatch();
+
   const [postData, setPostData] = useState([]);
   const [textInput, setTextInput] = useState("");
   const [pageTitleInput, setPageTitleInput] = useState("");
   const [bigTextInput, setBigTextInput] = useState("");
   const [selectedPage, setSelectedPage] = useState("0");
   const [apiParent, setApiParent] = useState("0");
-  StateManage(); //this is just a useEffect to verify token
-  const isAuthenticated = useSelector(
-    (state) => state.authReducer.isAuthenticated
-  );
-  if (typeof window !== "undefined" && !isAuthenticated)
-    router.push("/profile/login");
 
-  if (!isAuthenticated) return <></>;
-  if (postTitle !== "undefined" && !postTitle) return <></>;
+  // StateManage(); //this is just a useEffect to verify token
+  // const isAuthenticated = useSelector(
+  //   (state) => state.authReducer.isAuthenticated
+  // );
+  // if (typeof window !== "undefined" && !isAuthenticated)
+  //   router.push("/profile/login");
+
+  // if (!isAuthenticated) return <></>;
+  // if (postTitle !== "undefined" && !postTitle) return <></>;
+
+  useEffect(() => {
+    if (router.isReady) {
+      const res = editPost(postId);
+      console.log({ id: postId, isNew: isNew });
+      setPostData(res);
+      console.table(res);
+    }
+  }, [router.isReady]);
 
   function makeNewPage(pageName) {
     const res = createNewPageAPI(pageName, "", apiParent, postId).then(
@@ -282,7 +296,6 @@ function postFunction() {
           />
           <br />
           <ThePages />
-          {console.table(postData)}
         </fieldset>
       </form>
       {Textarea()}

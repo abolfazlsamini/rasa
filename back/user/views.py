@@ -14,7 +14,8 @@ CreatePageSerializer,
 UpdatePostSerializer, 
 UpdatePagesSerializer, 
 DeletePostSerializer,
-DeletePageSeriallizer
+DeletePageSeriallizer,
+SinglePostSerializer
 )
 
 
@@ -47,6 +48,24 @@ class GetUserPostsVIew(ListAPIView):
     #     except Exception as e:
     #         return Response({'ERROR:': str(e)})
 # GET user POSTS and PAGES
+
+class GetUserSinglePostsVIew(ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = SinglePostSerializer
+    queryset = Post.objects.all()
+
+    def post(self, request):
+        try:
+            user = self.request.user
+            data = request.data
+            post_id = data['id']
+            posts = user.posts.get(id = post_id)
+            pages = posts.pages.all().values('id', 'page_title','post', 'text')
+            return JsonResponse(list(pages), safe=False)
+        except Exception as e:
+            print(str(e))
+            return Response({'ERROR:': str(e)}, status=404)
+# POST: GET user's specific POST with related Pages
 
 class GetUserPageView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)

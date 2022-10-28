@@ -6,13 +6,13 @@ export default async (req, res) => {
       cookie.serialize("access", "", {
         httpOnly: true,
         maxAge: new Date(0),
-        secure: true,
+        secure: false,
         sameSite: "strict",
         path: "/",
       }),
       cookie.serialize("refresh", "", {
         httpOnly: true,
-        secure: true,
+        secure: false,
         maxAge: new Date(0),
         sameSite: "strict",
         path: "/",

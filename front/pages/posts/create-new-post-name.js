@@ -10,17 +10,17 @@ import styles from "../../styles/create-new-post-name.module.css";
 function postTitleFunction() {
   const [postTitle, setPostTitle] = useState("");
   const router = useRouter();
-  // StateManage(); //this is just a useEffect to verify token
-  // const isAuthenticated = useSelector(
-  //   (state) => state.authReducer.isAuthenticated
-  // );
-  // if (typeof window !== "undefined" && !isAuthenticated)
-  //   router.push({
-  //     pathname: "/profile/login",
-  //     query: { redirect: "posts/create-new-post-name" },
-  //   });
+  StateManage(); //this is just a useEffect to verify token
+  const isAuthenticated = useSelector(
+    (state) => state.authReducer.isAuthenticated
+  );
+  if (typeof window !== "undefined" && !isAuthenticated)
+    router.push({
+      pathname: "/profile/login",
+      query: { redirect: "posts/create-new-post-name" },
+    });
 
-  // if (!isAuthenticated) return <></>;
+  if (!isAuthenticated) return <></>;
 
   function onChangeHandler(event) {
     event.preventDefault();
@@ -35,7 +35,7 @@ function postTitleFunction() {
 
           router.push({
             pathname: "/posts/create-new-post",
-            query: { PostTitle: postTitle, id: id },
+            query: { PostTitle: postTitle, id: id, isNew: true },
           });
         } else
           swal(

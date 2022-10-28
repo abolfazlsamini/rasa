@@ -26,6 +26,12 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'post_title', 'pages', 'text', 'pages_set')
 # GET: GET user POSTS and PAGES
 
+class SinglePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+# POST: GET user's specific POST with related Pages
+
 class PageDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
