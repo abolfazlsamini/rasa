@@ -27,7 +27,7 @@ function postFunction() {
   const [bigTextInput, setBigTextInput] = useState("");
   const [selectedPage, setSelectedPage] = useState("0");
   const [apiParent, setApiParent] = useState("0");
-
+  console.log(postData);
   // StateManage(); //this is just a useEffect to verify token
   // const isAuthenticated = useSelector(
   //   (state) => state.authReducer.isAuthenticated
@@ -157,7 +157,7 @@ function postFunction() {
                     router.push({
                       pathname: "/profile/login",
                       query: { redirect: "posts/create-new-post-name" },
-                    });
+                    }); //TODO add post id so we get back to the post
                     break;
                 }
               });
@@ -168,20 +168,35 @@ function postFunction() {
   }
   function handleDelete(event) {
     event.preventDefault();
-    // deletePageAPI("69", "540").then((res) => {
-    //   console.log(res);
-    //   if (res.success && res.success != null && res.success != undefined) {
-    //     const newArray = [...postData];
-    //     const selectedPageIndex = newArray.findIndex(
-    //       (child) => child.id === selectedPage
-    //     );
-    //     newArray.splice(selectedPageIndex, 1);
-    //     setPostData(newArray);
-    //     setSelectedPage("0");
-    //   } else console.error("error", res);
-    // });
-
-    swal("yeah... this button dosn't work yet");
+    if (selectedPage != 0)
+      deletePageAPI(postId, selectedPage).then((res) => {
+        console.log(res);
+        if (res.success && res.success != null && res.success != undefined) {
+          const newArray = [...postData];
+          const selectedPageIndex = newArray.findIndex(
+            (child) => child.id === selectedPage
+          );
+          newArray.splice(selectedPageIndex, 1);
+          setPostData(newArray);
+          setSelectedPage("0");
+          swal(
+            "Deleted Successfully",
+            "the page was deleted successfully",
+            "success"
+          );
+        } else
+          swal(
+            "Couldn't Delete",
+            "something went wrong trying to delete page",
+            "error"
+          );
+      });
+    else
+      swal(
+        "Couldn't Delete",
+        "No page was selected make sure you're selecting a page",
+        "error"
+      );
   }
 
   const ThePages = () => {

@@ -2,25 +2,24 @@ import axios from "axios";
 import cookie from "cookie";
 
 export default async (req, res) => {
-  if (req.method === "DELETE") {
+  if (req.method === "GET") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
     if (access === false) {
       return res.status(403).json({
         error: "User forbidden from making the request",
-      }); //TODO dispatch verify or something?
+      }); //TODO dispatch verify maybe?
     }
-    const body = req.body;
     const headers = {
       headers: {
         Authorization: "Bearer " + access,
       },
     };
+    const post_id = req.query.post_content;
     try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACK_URL}/api/delete-page/`,
-        body,
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/posts/`,
         headers
       );
       if (response.status === 200) {
@@ -30,8 +29,10 @@ export default async (req, res) => {
       // i know that this 401 unauthorized should be in the try part but axios raise an error for anything
       // other than 200 and the fetch just dosen't work so here we are
       // TODO: eather fix axios or fix fetch for not working saing bad request
-
-      return res.status(401).json({ errrrrror: err });
+      return res.status(401).json({ error: err });
     }
+  } else {
+    res.setHeader("Allow", ["GET"]);
+    return res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
 };

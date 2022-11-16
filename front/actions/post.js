@@ -86,14 +86,16 @@ export const deletePageAPI = async (page_id, post_id) => {
   });
 
   try {
-    const res = await fetch("/api/posts/delete_page", {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: body,
-    });
+    const res = await fetch(
+      "/api/posts/delete_page/" + post_id + "&" + page_id,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await res.json();
     if (res.status === 200) {
       return data;
@@ -106,18 +108,13 @@ export const deletePageAPI = async (page_id, post_id) => {
 };
 
 export const CalleditPageAPI = async (id) => {
-  const body = JSON.stringify({
-    id,
-  });
-
   try {
-    const res = await fetch("/api/posts/edit_post/", {
-      method: "POST",
+    const res = await fetch("/api/posts/" + id, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: body,
     });
     const data = await res.json();
     if (res.status === 200) {

@@ -8,12 +8,20 @@ export default function editPost(post_id) {
     if (res && res.success && res.success != undefined) {
       const data = res.success;
       Object.values(data).map((page) => {
-        arr.push({
-          id: page.id.toString(),
-          pageTitle: page.page_title,
-          parent: page.post.toString(),
-          text: page.text,
-        });
+        if (page.page != undefined && page.page != null)
+          arr.push({
+            id: page.id.toString(),
+            pageTitle: page.page_title,
+            parent: page.page.toString(),
+            text: page.text,
+          });
+        else
+          arr.push({
+            id: page.id.toString(),
+            pageTitle: page.page_title,
+            parent: "0",
+            text: page.text,
+          });
       });
     }
     // console.log(arr);

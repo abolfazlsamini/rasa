@@ -12,7 +12,9 @@ UpdatePostView,
 UpdatePageVIew,
 DeletePostView,
 DeletePageView,
-GetUserSinglePostsVIew
+GetUserSinglePostsVIew,
+GetUserSinglePageVIew,
+GetUserSinglePostsFullVIew
 )
 
 urlpatterns = [
@@ -21,7 +23,9 @@ urlpatterns = [
     path('api/posts/',GetPostView.as_view(), name='posts'),
     path('api/pages/',GetUserPageView.as_view(), name='pages'),
 
-    path('api/single-posts/',GetUserSinglePostsVIew.as_view(), name='singleposts'),
+    path('api/single-post/',GetUserSinglePostsVIew.as_view(), name='singlepost'),
+    path('api/single-post-full/',GetUserSinglePostsFullVIew.as_view(), name='singlepostfull'),
+    path('api/single-page/',GetUserSinglePageVIew.as_view(), name='singlepage'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

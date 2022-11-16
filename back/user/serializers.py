@@ -30,7 +30,13 @@ class SinglePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-# POST: GET user's specific POST with related Pages
+# GET: GET user's specific POST with related Pages
+
+class SinglePageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pages
+        fields = '__all__'
+# GET: GET user's specific Page with Text
 
 class PageDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,7 +69,7 @@ class UpdatePagesSerializer(serializers.ModelSerializer):
 class DeletePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('id',)
 # DELETE: delete post
 
 class DeletePageSeriallizer(serializers.ModelSerializer):

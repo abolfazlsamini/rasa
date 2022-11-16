@@ -15,7 +15,8 @@ UpdatePostSerializer,
 UpdatePagesSerializer, 
 DeletePostSerializer,
 DeletePageSeriallizer,
-SinglePostSerializer
+SinglePostSerializer,
+SinglePageSerializer
 )
 
 
@@ -54,14 +55,51 @@ class GetUserSinglePostsVIew(ListAPIView):
     serializer_class = SinglePostSerializer
     queryset = Post.objects.all()
 
-    def post(self, request):
+    def get(self, request):
         try:
             user = self.request.user
-            data = request.data
-            post_id = data['id']
+            # data = request.data
+            post_id = self.request.GET.get('id', None)
             posts = user.posts.get(id = post_id)
-            pages = posts.pages.all().values('id', 'page_title','post', 'text')
+            pages = posts.pages.all().values('id', 'page_title','post')
             return JsonResponse(list(pages), safe=False)
+        except Exception as e:
+            print(str(e))
+            return Response({'ERROR:': str(e)}, status=404)
+# POST: GET user's specific POST with related Pages
+
+class GetUserSinglePostsFullVIew(ListAPIView):
+    permission_classes = (AllowAny,)
+    # serializer_class = SinglePostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request):
+        try:
+            user = self.request.user
+            # data = request.data
+            post_id = self.request.GET.get('id', None)
+            posts = user.posts.get(id = post_id)
+            pages = posts.pages.all().values('id', 'page_title','page','text')
+            return JsonResponse(list(pages), safe=False)
+        except Exception as e:
+            print(str(e))
+            return Response({'ERROR:': str(e)}, status=404)
+# POST: GET user's specific POST with related Pages
+
+class GetUserSinglePageVIew(ListAPIView):
+    permission_classes = (AllowAny,)
+    # serializer_class = SinglePageSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request):
+        try:
+            user = self.request.user
+            page_id = self.request.GET.get('pageId', None)
+            post_id = self.request.GET.get('postId', None)
+            post = user.posts.get(id = post_id)
+            page = post.pages.filter(id = page_id).values('id', 'page_title','page','text')
+            # pages = post.pages.all().values('id', 'page_title','text')
+            return JsonResponse(list(page), safe=False)
         except Exception as e:
             print(str(e))
             return Response({'ERROR:': str(e)}, status=404)
@@ -167,20 +205,24 @@ class UpdatePageVIew(UpdateAPIView):
             return Response({'ERROR:': str(e)},status=400)
 # Updates a Page
 
-class DeletePostView(DestroyAPIView):
+class DeletePostView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = DeletePostSerializer
+    queryset = Post.objects.all()
 
     def delete(self, request, *args, **kwargs):
         try:
             user = self.request.user
-            data = request.data
-            post_id = data['post_id']
+            # data = request.data
+            post_id = self.request.GET.get('postId', None)
             post = user.posts.get(id = post_id)
             post.delete()
             return Response({'SUCCESS:': str(post)})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=400)
+    def get(self, request, *args, **kwargs):
+        return Response({'ERROR:': str("method Get not allowed")},status=400)
+
 # delete a post
 
 class DeletePageView(DestroyAPIView):
@@ -190,9 +232,9 @@ class DeletePageView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         try:
             user = self.request.user
-            data = request.data
-            page_id = data['page_id']
-            post_id = data['post_id']
+            # data = request.data
+            page_id = self.request.GET.get('page_id', None)
+            post_id = self.request.GET.get('post_id', None)
             post = user.posts.get(id = post_id)
             page = post.pages.get(id=page_id)
             if not page:

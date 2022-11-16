@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "cookie";
 
 export default async (req, res) => {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
@@ -11,17 +11,16 @@ export default async (req, res) => {
         error: "User forbidden from making the request",
       }); //TODO dispatch verify maybe?
     }
-    const body = req.body;
-    console.log(body);
+    const postId = req.query;
+
     const headers = {
       headers: {
         Authorization: "Bearer " + access,
       },
     };
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACK_URL}/api/single-posts/`,
-        body,
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/single-post-full/?id=${postId.edit_post}`,
         headers
       );
       if (response.status === 200) {
