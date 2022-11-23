@@ -17,7 +17,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=100),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=100),
     'UPDATE_LAST_LOGIN': True,
     }
 # Quick-start development settings - unsuitable for production

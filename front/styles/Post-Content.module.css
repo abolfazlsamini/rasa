@@ -1,0 +1,26 @@
+.image{
+    filter: invert(1);
+    margin: 20px;
+}
+.page_order a{
+    text-decoration: none;
+    font-size: large;
+    color: white
+}
+.page_order li{
+    list-style-type: none;
+    padding: 3px;
+
+}
+.page_order ul{
+    margin: 0px;
+    padding: 0px;
+}
+.page_order {
+    border: 3px solid black;
+    min-width: 200px;
+    min-height: 400px;
+    position:absolute;
+    top: 90px;;
+    right:0;
+}

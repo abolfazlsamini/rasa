@@ -15,7 +15,6 @@ export default async (req, res) => {
     const myArray = parameter.delete_page.split("&");
     const post_id = myArray[1];
     const page_id = myArray[0];
-    console.log(page_id);
     const headers = {
       headers: {
         Authorization: "Bearer " + access,

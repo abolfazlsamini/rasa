@@ -32,7 +32,7 @@ function postTitleFunction() {
       createNewPostAPI(postTitle).then((res) => {
         if (res.success && res.success != undefined) {
           const id = Object.values(res.success)[0];
-
+          //TODO either make a default first page here or in the back-end... preferably in the back-end
           router.push({
             pathname: "/posts/create-new-post",
             query: { PostTitle: postTitle, id: id, isNew: true },

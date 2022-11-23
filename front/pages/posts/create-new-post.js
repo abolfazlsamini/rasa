@@ -167,7 +167,7 @@ function postFunction() {
     } else swal("No page was selected");
   }
   function handleDelete(event) {
-    event.preventDefault();
+    event.preventDefault(); //TODO prevent user from deleting all the pages
     if (selectedPage != 0)
       deletePageAPI(postId, selectedPage).then((res) => {
         console.log(res);

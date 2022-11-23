@@ -18,7 +18,8 @@ DeletePageSeriallizer,
 SinglePostSerializer,
 SinglePageSerializer
 )
-
+from django.db.models import F, When, Q, Case
+from django.db.models.functions import Coalesce, FirstValue
 
 class UserRegisterView(CreateAPIView):
     permission_classes = (AllowAny,)
@@ -41,13 +42,22 @@ class GetUserPostsVIew(ListAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
-    # def get(self, request):
-    #     try:
-    #         user = self.request.user
-    #         posts = user.posts.all().values('id', 'post_title', 'created_date', 'last_modified_date')
-    #         return JsonResponse(list(posts), safe=False)
-    #     except Exception as e:
-    #         return Response({'ERROR:': str(e)})
+    def get(self, request):
+        try:
+            user = self.request.user
+            posts = user.posts.all().values('id', 'post_title', 'created_date', 'last_modified_date','pages')
+            data = list(posts)
+            the_list = []
+            data_list = []
+            for i in range(len(data)):
+                if data[i]['id'] not in the_list:
+                    the_list.append(data[i]['id'])
+                    data_list.append(data[i])
+
+            return JsonResponse(list(data_list), safe=False)
+        except Exception as e:
+            return Response({'ERROR:': str(e)})
+
 # GET user POSTS and PAGES
 
 class GetUserSinglePostsVIew(ListAPIView):
@@ -57,12 +67,31 @@ class GetUserSinglePostsVIew(ListAPIView):
 
     def get(self, request):
         try:
-            user = self.request.user
+            # user = self.request.user
             # data = request.data
             post_id = self.request.GET.get('id', None)
-            posts = user.posts.get(id = post_id)
+            posts = Post.objects.get(id = post_id)
             pages = posts.pages.all().values('id', 'page_title','post')
             return JsonResponse(list(pages), safe=False)
+        except Exception as e:
+            print(str(e))
+            return Response({'ERROR:': str(e)}, status=404)
+# POST: GET user's specific POST with related Pages
+
+class GetUserSinglePageVIew(ListAPIView):
+    permission_classes = (AllowAny,)
+    # serializer_class = SinglePageSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request):
+        try:
+            # user = self.request.user
+            page_id = self.request.GET.get('pageId', None)
+            post_id = self.request.GET.get('postId', None)
+            post = Post.objects.get(id = post_id)
+            page = post.pages.filter(id = page_id).values('id', 'page_title','page','text')
+            # pages = post.pages.all().values('id', 'page_title','text')
+            return JsonResponse(list(page), safe=False)
         except Exception as e:
             print(str(e))
             return Response({'ERROR:': str(e)}, status=404)
@@ -86,24 +115,6 @@ class GetUserSinglePostsFullVIew(ListAPIView):
             return Response({'ERROR:': str(e)}, status=404)
 # POST: GET user's specific POST with related Pages
 
-class GetUserSinglePageVIew(ListAPIView):
-    permission_classes = (AllowAny,)
-    # serializer_class = SinglePageSerializer
-    queryset = Post.objects.all()
-
-    def get(self, request):
-        try:
-            user = self.request.user
-            page_id = self.request.GET.get('pageId', None)
-            post_id = self.request.GET.get('postId', None)
-            post = user.posts.get(id = post_id)
-            page = post.pages.filter(id = page_id).values('id', 'page_title','page','text')
-            # pages = post.pages.all().values('id', 'page_title','text')
-            return JsonResponse(list(page), safe=False)
-        except Exception as e:
-            print(str(e))
-            return Response({'ERROR:': str(e)}, status=404)
-# POST: GET user's specific POST with related Pages
 
 class GetUserPageView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)

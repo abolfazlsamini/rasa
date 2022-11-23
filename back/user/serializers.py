@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import UserModel
 from post.models import Pages, Post
+from rest_framework.response import Response
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,12 +19,13 @@ class PageSerializer(serializers.ModelSerializer):
         model = Pages
         fields = ('id', 'page_title', 'page', 'text')
 class PostSerializer(serializers.ModelSerializer):
-    pages = PageSerializer(many=True, read_only=True)
-    text = PageSerializer(many=True, read_only=True)
+    # pages = PageSerializer(many=True, read_only=True)
+    # text = PageSerializer(many=True, read_only=True)
     pages_set = PageSerializer(read_only=True)
     class Meta:
         model = Post
-        fields = ('id', 'post_title', 'pages', 'text', 'pages_set')
+        fields = ('id', 'post_title', 'pages_set')
+    
 # GET: GET user POSTS and PAGES
 
 class SinglePostSerializer(serializers.ModelSerializer):

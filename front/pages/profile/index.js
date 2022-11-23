@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import swal from "sweetalert";
 import Image from "next/image";
 import editImage from ".././../public/edit.png";
+import { CallGetUserPosts } from "../../actions/post";
+import Link from "next/link";
 
 function Profile() {
   const [data, setData] = useState([]);
@@ -22,19 +24,20 @@ function Profile() {
     });
 
   useEffect(() => {
-    getData().then((data) => {
+    CallGetUserPosts().then((data) => {
       if (isAuthenticated) setData(Object.values(data)[0]);
     });
   }, []);
   if (!isAuthenticated) return <></>;
-  try {
-    return (
-      <div className={styles.CreatePost}>
-        <form>
-          {data?.map((posts) => {
-            return (
-              <ul className={styles.PostList}>
-                <li id={posts.id} href="">
+
+  return (
+    <div className={styles.CreatePost}>
+      {data?.map((posts) => {
+        return posts.pages != null ? (
+          <ul className={styles.PostList}>
+            <Link href={`/posts/show/${posts.id}/${posts.pages}`}>
+              <a>
+                <li id={posts.id} href="/" key={posts.id}>
                   <div className={styles.PostTitle}>{posts.post_title}</div>{" "}
                   <Image
                     title="Edit This Post"
@@ -64,33 +67,15 @@ function Profile() {
                     {posts.created_date.slice(14, 16)}
                   </div>
                 </li>
-              </ul>
-            );
-          })}
-        </form>
-      </div>
-    );
-  } catch (err) {
-    console.log(err);
-  }
+              </a>
+            </Link>
+          </ul>
+        ) : (
+          <></>
+        );
+      })}
+    </div>
+  );
 }
-async function getData() {
-  try {
-    const res = await fetch("/api/posts/get_posts", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.status === 200) {
-      return res.json();
-    } else {
-      return "failed to get posts";
-    }
-  } catch (err) {
-    console.log(err);
-    return "something went wrong trying to get posts";
-  }
-}
+
 export default Profile;

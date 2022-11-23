@@ -6,20 +6,22 @@ export default async (req, res) => {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
 
-    if (access === false) {
-      return res.status(403).json({
-        error: "User forbidden from making the request",
-      }); //TODO dispatch verify maybe?
-    }
+    // if (access === false) {
+    //   return res.status(403).json({
+    //     error: "User forbidden from making the request",
+    //   }); //TODO dispatch verify maybe?
+    // }
+
     const headers = {
       headers: {
         Authorization: "Bearer " + access,
       },
     };
+    const post_id = req.query.pages; // this is confusing but this is in fact the post id :)
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACK_URL}/api/get-posts/`,
-        headers
+        `${process.env.NEXT_PUBLIC_BACK_URL}/api/single-post/?id=${post_id}`
+        // headers
       );
       if (response.status === 200) {
         return res.status(200).json({ success: response.data });
