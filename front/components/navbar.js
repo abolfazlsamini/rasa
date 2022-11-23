@@ -58,11 +58,6 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <Link href={"/posts/show/61/16"}>
-            <a>test</a>
-          </Link>
-        </li>
-        <li>
           <Link href={"/posts/create-new-post-name"}>
             <a>create new post</a>
           </Link>
