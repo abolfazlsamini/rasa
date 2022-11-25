@@ -11,7 +11,7 @@ import { CallGetUserPosts } from "../../actions/post";
 import Link from "next/link";
 
 function Profile() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([1, 2, 3]);
   const router = useRouter();
   StateManage(); //this is just a useEffect to verify token
   const isAuthenticated = useSelector(
@@ -24,12 +24,12 @@ function Profile() {
     });
 
   useEffect(() => {
-    CallGetUserPosts().then((data) => {
-      if (isAuthenticated) setData(Object.values(data)[0]);
-    });
+    if (isAuthenticated)
+      CallGetUserPosts().then((data) => {
+        if (data.success) setData(Object.values(data)[0]);
+      });
   }, []);
   if (!isAuthenticated) return <></>;
-
   return (
     <div className={styles.CreatePost}>
       {data?.map((posts) => {

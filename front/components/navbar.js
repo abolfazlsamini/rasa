@@ -31,7 +31,7 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href={"/profile/signup"}>
+            <Link href={"/profile/register"}>
               <a>Signup</a>
             </Link>
           </li>
@@ -61,9 +61,9 @@ function Navbar() {
           <Link href={"/posts/create-new-post-name"}>
             <a>create new post</a>
           </Link>
-          <a className="nav-link" href="#!" onClick={logoutHandler}>
-            Logout
-          </a>
+          <Link href={"#"}>
+            <a onClick={logoutHandler}>Logout</a>
+          </Link>
         </li>
       </ul>
     </div>

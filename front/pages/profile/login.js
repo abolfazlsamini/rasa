@@ -22,7 +22,7 @@ function Login() {
     if (typeof window !== "undefined" && isAuthenticated)
       router.push("/profile");
   }
-
+  if (isAuthenticated) return <></>;
   //TODO: else dispatch(logout()); // this deletes the wrong access token to prevent unnecessary requests to backend
 
   const handleSubmit = async (event) => {

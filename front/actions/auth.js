@@ -42,6 +42,7 @@ export const login = (username, password) => async (dispatch) => {
     });
   }
 };
+
 export const verify = () => async (dispatch) => {
   try {
     const res = await fetch("/api/verify", {
@@ -57,7 +58,7 @@ export const verify = () => async (dispatch) => {
         type: AUTHORIZED_SUCCESS,
       });
     } else {
-      console.log("elseeeeeee");
+      console.log("dispatch logOut");
       // dispatch({
       //   type: AUTHORIZED_FAIL,
       // });
@@ -68,6 +69,7 @@ export const verify = () => async (dispatch) => {
     dispatch(logout());
   }
 };
+
 export const logout = () => async (dispatch) => {
   try {
     const res = await fetch("/api/logout", {
@@ -102,5 +104,45 @@ export const logout = () => async (dispatch) => {
       "idk man even i'm suprised how'd this happend, you shouldn't have even seen this",
       "error"
     );
+  }
+};
+
+export const register = (username, password) => async (dispatch) => {
+  const body = JSON.stringify({
+    username,
+    password,
+  });
+
+  try {
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+
+    if (res.status === 200) {
+      dispatch({
+        type: LOGIN_SUCCESS,
+      });
+    } else if (res.error) {
+      // dispatch({
+      //   type: LOGIN_FAIL,
+      // });
+      swal("Register failed", "couldn't register", "error");
+    } else
+      swal(
+        "Register failed",
+        "something went wrong and we couldn't register you in",
+        "error"
+      );
+  } catch (err) {
+    swal("loggin failed", "couldn't register", "error");
+    console.log(err);
+    dispatch({
+      type: LOGIN_FAIL,
+    });
   }
 };
