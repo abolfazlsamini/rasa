@@ -1,5 +1,5 @@
 from django.db import models
-
+from user.models import UserModel
 # class FirstPageManager(models.Manager):
 #     def getFirstPage(self):
 #         return self.get_queryset().all()
@@ -8,6 +8,7 @@ class Post(models.Model):
     post_title = models.CharField(max_length=100, blank=False)
     created_date = models.DateTimeField(auto_now=True)
     last_modified_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(UserModel, related_name='user', blank=True, on_delete=models.DO_NOTHING)
     # objects = models.Manager()
     # first_page = FirstPageManager()
 

@@ -20,22 +20,28 @@ export default function PostView() {
 
   const fetchData = async () => {
     console.log("Fetching");
-    const postDataPromis = CallGetSinglePage(postId, pageId); // call the onw with pageid
-    const pagesPromis = CallGetAllPagesOfPost(postId); // call the one WithOUT padeid
+    const postDataPromis = CallGetSinglePage(postId, pageId); // the page text
+    const pagesPromis = CallGetAllPagesOfPost(postId); // all the pages related to post
 
-    setpostData(false);
     const postData = await postDataPromis;
     const pageData = await pagesPromis;
 
     setpostData(postData);
     setPages(pageData);
   };
-  // CalleditPageAPI(postId).then((res) => {
-  //   Object.values(data).map();
-  // });
+
+  const fetchPages = async () => {
+    const postDataPromis = CallGetSinglePage(postId, pageId); // the page text
+
+    const postData = await postDataPromis;
+
+    setpostData(postData);
+  };
 
   useEffect(() => {
-    if (router.isReady) fetchData();
+    if (router.isReady)
+      if (!postData) fetchData();
+      else fetchPages();
   }, [router]);
 
   const retry = () => {
@@ -85,7 +91,7 @@ export default function PostView() {
         </div>
       );
     }
-    if (postData && postData.error != undefined) {
+    if (pages && pages.error != undefined) {
       return retry();
     }
   };

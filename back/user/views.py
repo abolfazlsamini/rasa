@@ -18,7 +18,7 @@ DeletePageSeriallizer,
 SinglePostSerializer,
 SinglePageSerializer
 )
-from django.db.models import F, When, Q, Case
+from django.db.models import F, When, Q, Case, Count
 from django.db.models.functions import Coalesce, FirstValue
 
 class UserRegisterView(CreateAPIView):
@@ -38,14 +38,15 @@ class UserRegisterView(CreateAPIView):
 # user will get a token after registering
 
 class GetUserPostsVIew(ListAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
 
     def get(self, request):
         try:
-            user = self.request.user
-            posts = user.posts.all().values('id', 'post_title', 'created_date', 'last_modified_date','pages')
+            user = request.user
+            posts = Post.objects.filter(user = user).values('id', 'post_title', 'created_date', 'last_modified_date','pages')
+            # posts = user.posts.all().values('id', 'post_title', 'created_date', 'last_modified_date','pages')
             data = list(posts)
             the_list = []
             data_list = []
@@ -57,7 +58,6 @@ class GetUserPostsVIew(ListAPIView):
             return JsonResponse(list(data_list), safe=False)
         except Exception as e:
             return Response({'ERROR:': str(e)})
-
 # GET user POSTS and PAGES
 
 class GetUserSinglePostsVIew(ListAPIView):
@@ -107,7 +107,8 @@ class GetUserSinglePostsFullVIew(ListAPIView):
             user = self.request.user
             # data = request.data
             post_id = self.request.GET.get('id', None)
-            posts = user.posts.get(id = post_id)
+            posts = Post.objects.get(id = post_id)
+            # posts = user.posts.get(id = post_id)
             pages = posts.pages.all().values('id', 'page_title','page','text')
             return JsonResponse(list(pages), safe=False)
         except Exception as e:
@@ -121,13 +122,14 @@ class GetUserPageView(RetrieveAPIView):
     serializer_class = PageDetailSerializer
     queryset = Post.objects.all()
 
-    def get(self, request, *arg, **kwargs):
+    def get(self, request):
         try:
             data = request.data
             page_id = data['id']
             post_id = data['post']
-            user = self.request.user
-            post = user.posts.get(id=post_id)
+            post = Post.objects.get(id=post_id)
+            if post.user != request.user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
             page = post.pages.get(id=page_id)
             return Response({'page_title':str(page.page_title),'text':str(page.text)})
         except Exception as e:
@@ -140,13 +142,16 @@ class CreatePostView(CreateAPIView):
         try:
             data=request.data
             post_title = data['post_title']
-            user = self.request.user
-            post = Post.objects.create(post_title = post_title)
-            user.posts.add(post.id)
+            user = request.user
+            post = Post.objects.create(post_title = post_title, user=user)
+            if post.user != user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
+            # post.user.add(post.id)
             return Response({'SUCCESS:': str(post.id)})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=400)
 # Create new Post
+
 
 class CreatePageView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -161,13 +166,17 @@ class CreatePageView(CreateAPIView):
             page_id = data['page']
             if page_id != "0":# is there a better way to do this? it check if a page should be under other pages
                 user = self.request.user
-                post = user.posts.get(id=post_id)
+                post = Post.objects.get(id=post_id)
+                if post.user != request.user:
+                    return Response({'ERROR:': str("You are not the Author of this post")},status=400)
                 page = post.pages.get(id=page_id)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post, page = page)
                 return Response(str(page.id))
             else:
                 user = self.request.user
-                post = user.posts.get(id=post_id)
+                post = Post.objects.get(id=post_id)
+                if post.user != request.user:
+                    return Response({'ERROR:': str("You are not the Author of this post")},status=400)
                 page = Pages.objects.create(page_title = page_title, text = text, post = post)
                 return Response(str(page.id))
 
@@ -186,7 +195,9 @@ class UpdatePostView(UpdateAPIView):
             data = request.data
             post_id = data['id']
             post_title = data['post_title']
-            post = user.posts.filter(id=post_id)
+            post = Post.objects.filter(id=post_id)
+            if post.user != user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
             post.update(post_title=post_title)
             return Response({'SUCCESS:': str(post_title)})
         except Exception as e:
@@ -206,7 +217,9 @@ class UpdatePageVIew(UpdateAPIView):
             page_title = data['page_title']
             text = data['text']
             user = self.request.user
-            post = user.posts.get(id=post_id)
+            post = Post.objects.get(id=post_id)
+            if post.user != request.user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
             page = post.pages.get(id=page_id)
             parent = page.page
             page = post.pages.filter(id=page_id)
@@ -226,7 +239,9 @@ class DeletePostView(ListAPIView):
             user = self.request.user
             # data = request.data
             post_id = self.request.GET.get('postId', None)
-            post = user.posts.get(id = post_id)
+            post = Post.objects.get(id = post_id)
+            if post.user != request.user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
             post.delete()
             return Response({'SUCCESS:': str(post)})
         except Exception as e:
@@ -246,14 +261,35 @@ class DeletePageView(DestroyAPIView):
             # data = request.data
             page_id = self.request.GET.get('page_id', None)
             post_id = self.request.GET.get('post_id', None)
-            post = user.posts.get(id = post_id)
+            post = Post.objects.get(id = post_id)
+            if post.user != request.user:
+                return Response({'ERROR:': str("You are not the Author of this post")},status=400)
             page = post.pages.get(id=page_id)
             if not page:
                 return Response({'ERROR:': 'page not found'},status=404)
             page.delete()
             return Response({'SUCCESS:': str(page.page_title)})
         except Exception as e:
-            print(str(e))
             return Response({'ERROR:': str(e)},status=402)
 # delete page
 
+class GetFollowersCount(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = UserModel
+    def get(self, request):
+        try:
+            return Response({'SUCCESS:': str(self.request.user.followers.all().count())})
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=402)
+# returnst the users followers
+
+class GetPostsAuthor(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    queryset = Post
+
+    def get(self, request):
+        post_id = self.request.GET.get('post_id', None)
+        user = Post.objects.get(id = post_id).user
+        return Response(str(user))
+
+# it gets post id it returns {user, false} but if the request.user == Post.user it returns {user, true}

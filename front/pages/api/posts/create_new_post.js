@@ -14,6 +14,7 @@ export default async (req, res) => {
     const body = req.body;
     const headers = {
       headers: {
+        "Content-Type": "application/json",
         Authorization: "Bearer " + access,
       },
     };

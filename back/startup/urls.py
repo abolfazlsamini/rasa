@@ -14,7 +14,9 @@ DeletePostView,
 DeletePageView,
 GetUserSinglePostsVIew,
 GetUserSinglePageVIew,
-GetUserSinglePostsFullVIew
+GetUserSinglePostsFullVIew,
+GetFollowersCount,
+GetPostsAuthor
 )
 
 urlpatterns = [
@@ -45,5 +47,10 @@ urlpatterns = [
     #DELETE: delete post:
     path('api/delete-post/', DeletePostView.as_view(), name='delete-post'),
     #DELETE: delete page:
-    path('api/delete-page/', DeletePageView.as_view(), name='delete-page')
+    path('api/delete-page/', DeletePageView.as_view(), name='delete-page'),
+
+
+    path('api/user/followers-count', GetFollowersCount.as_view(), name='followers-count'),
+    path('api/user/posts-author', GetPostsAuthor.as_view(), name='get-post-author'),
+
 ]
