@@ -182,7 +182,8 @@ class CreatePageView(CreateAPIView):
 
         except Exception as e:
             return Response({'ERROR:': str(e)},status=400)
-# Create new Page
+# Create new Page 
+# 'api/create-page/'
 
 class UpdatePostView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -202,7 +203,8 @@ class UpdatePostView(UpdateAPIView):
             return Response({'SUCCESS:': str(post_title)})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=400)
-# get id and updates the post_title
+# get id and updates the post_title 
+# 'api/update-post/'
 
 class UpdatePageVIew(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -227,7 +229,8 @@ class UpdatePageVIew(UpdateAPIView):
             return Response({'SUCCESS:': str(page_title)})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=400)
-# Updates a Page
+# Updates a Page 
+# 'api/update-page/'
 
 class DeletePostView(ListAPIView):
     permission_classes = (IsAuthenticated,)
@@ -248,8 +251,8 @@ class DeletePostView(ListAPIView):
             return Response({'ERROR:': str(e)},status=400)
     def get(self, request, *args, **kwargs):
         return Response({'ERROR:': str("method Get not allowed")},status=400)
-
-# delete a post
+# delete a post 
+# 'api/delete-post/'
 
 class DeletePageView(DestroyAPIView):
     # permission_classes = (IsAuthenticated,)
@@ -271,7 +274,8 @@ class DeletePageView(DestroyAPIView):
             return Response({'SUCCESS:': str(page.page_title)})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=402)
-# delete page
+# delete page 
+# 'api/delete-page/'
 
 class GetFollowersCount(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
@@ -281,15 +285,96 @@ class GetFollowersCount(RetrieveAPIView):
             return Response({'SUCCESS:': str(self.request.user.followers.all().count())})
         except Exception as e:
             return Response({'ERROR:': str(e)},status=402)
-# returnst the users followers
+# returnst the users followers 
+# 'api/user/followers-count'
 
 class GetPostsAuthor(RetrieveAPIView):
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
     queryset = Post
 
     def get(self, request):
-        post_id = self.request.GET.get('post_id', None)
-        user = Post.objects.get(id = post_id).user
-        return Response(str(user))
+        try:
+            user = request.user
+            post_id = self.request.GET.get('post_id', None)
+            author = Post.objects.get(id = post_id).user
+            author_name = Post.objects.get(id = post_id).user.username
+            author_id = Post.objects.get(id = post_id).user.id
+            authors_follower_count = author.followers.count()
+            if(user.is_anonymous):
+                res = {"author_name":author_name, "authors_follower_count":authors_follower_count, "is_followed":False, "author_id":author_id}
+                return Response(res)
+            
+            is_followed = author.followers.filter(id = user.id).exists()
+            res = {"author_name":author_name, "authors_follower_count":authors_follower_count, "is_followed":is_followed, "author_id":author_id}
+            return Response((res))
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=402)
+# GET Post_ID and returns {author_name, authors_follower_count, is_followed}
+# "api/user/posts-author"
 
-# it gets post id it returns {user, false} but if the request.user == Post.user it returns {user, true}
+class Follow(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = UserModel
+
+    def update(self, request):
+        try:  
+            user = request.user
+            author_id = request.data["author_id"]
+            author = UserModel.objects.get(id = author_id)
+            # if author.followers.filter(id = user.id).exists():
+            #     return Response({'ERROR:': str("You Are Already Following This User")},status=402)
+            author.followers.add(user)
+            return Response({'SUCCESS:': str("SUCCESS")}) 
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=402)
+# PUT: Follow a user
+# "api/user/follow"
+
+class UnFollow(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = UserModel
+
+    def update(self, request):
+        try:  
+            user = request.user
+            author_id = request.data["author_id"]
+            author = UserModel.objects.get(id = author_id)
+            # if not author.followers.filter(id = user.id).exists():
+            #     return Response({'ERROR:': str("You Are Not Following This User")},status=402)
+            author.followers.remove(user)
+            return Response({'SUCCESS:': str("SUCCESS")}) 
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=402)
+# PUT: UnFollow a user
+# "api/user/unfollow"
+
+class GetAuthorProfile(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    queryset = UserModel
+
+    def get(self, request):
+        try:
+            user = request.user
+            author_id = self.request.GET.get('author_id', None)
+            author = UserModel.objects.get(id = author_id)
+            author_name = author.username
+            authors_follower_count = author.followers.count()
+            posts = Post.objects.filter(user = author).values('id', 'post_title', 'created_date', 'last_modified_date','pages')
+            data = list(posts)
+            the_list = []
+            data_list = []
+            for i in range(len(data)):
+                if data[i]['id'] not in the_list:
+                    the_list.append(data[i]['id'])
+                    data_list.append(data[i])
+            if(user.is_anonymous):
+                res = {"author_name":author_name, "authors_follower_count":authors_follower_count, "is_followed":False, "posts":data_list}
+                return Response(res, status=200)
+            
+            is_followed = author.followers.filter(id = user.id).exists()
+            res = {"author_name":author_name, "authors_follower_count":authors_follower_count, "is_followed":is_followed, "posts":data_list}
+            return Response(res, status=200)
+        except Exception as e:
+            return Response({'ERROR:': str(e)},status=402)
+# GET: author profille with author id
+# 'api/user/author/'

@@ -237,3 +237,90 @@ export const CallGetPosts = async () => {
     return { error: "something went wrong trying to get posts" };
   }
 };
+
+export const CallGetAuthorData = async (post_id) => {
+  try {
+    const res = await fetch("/api/posts/show_post/post/author/" + post_id, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (res.status === 200) {
+      return data;
+    } else {
+      return data;
+    }
+  } catch (err) {
+    return err;
+  }
+};
+
+export const CallFollow = async (author_id) => {
+  const body = JSON.stringify({
+    author_id,
+  });
+  try {
+    const res = await fetch("/api/follow", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+    const data = await res.json();
+    if (res.status === 200) {
+      return data;
+    } else {
+      return data;
+    }
+  } catch (err) {
+    return err;
+  }
+};
+export const CallUnFollow = async (author_id) => {
+  const body = JSON.stringify({
+    author_id,
+  });
+  try {
+    const res = await fetch("/api/unFollow", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+    const data = await res.json();
+    if (res.status === 200) {
+      return data;
+    } else {
+      return data;
+    }
+  } catch (err) {
+    return err;
+  }
+};
+
+export const CallGetAuthorProfile = async (author_id) => {
+  try {
+    const res = await fetch("/api/users/profile/" + author_id, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (res.status === 200) {
+      return data;
+    } else {
+      return data;
+    }
+  } catch (err) {
+    return err;
+  }
+};

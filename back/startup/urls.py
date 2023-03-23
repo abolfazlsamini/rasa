@@ -16,7 +16,10 @@ GetUserSinglePostsVIew,
 GetUserSinglePageVIew,
 GetUserSinglePostsFullVIew,
 GetFollowersCount,
-GetPostsAuthor
+GetPostsAuthor,
+Follow,
+UnFollow,
+GetAuthorProfile
 )
 
 urlpatterns = [
@@ -52,5 +55,10 @@ urlpatterns = [
 
     path('api/user/followers-count', GetFollowersCount.as_view(), name='followers-count'),
     path('api/user/posts-author', GetPostsAuthor.as_view(), name='get-post-author'),
+    path('api/user/follow/', Follow.as_view(), name='Follow'),
+    path('api/user/unfollow/', UnFollow.as_view(), name='UnFollow'),
+    path('api/user/author', GetAuthorProfile.as_view(), name='GetAuthorProfile'),
+    
+
 
 ]
