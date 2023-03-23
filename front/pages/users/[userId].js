@@ -28,8 +28,6 @@ export default function Profile() {
 
     const profileData = await profileRes;
 
-    console.log(profileData.success.is_followed);
-
     if (profileData.success && profileData.success != undefined) {
       setProfileData({ data: profileData.success, error: "" });
       setfollowData({
