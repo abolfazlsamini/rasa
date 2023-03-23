@@ -150,10 +150,11 @@ export default function Profile() {
     if (profileData.error != "") return retry();
     return (
       <div className="Posts">
+        ALl Posts by {profileData.data.author_name}:
         <ul>
           {profileData.data.posts?.map((post) => {
             return (
-              <li>
+              <li key={post.id}>
                 <Link href={`/posts/show/${post.id}/${post.pages}`}>
                   <a>{post.post_title}</a>
                 </Link>
