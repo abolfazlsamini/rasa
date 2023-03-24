@@ -16,10 +16,14 @@ UpdatePagesSerializer,
 DeletePostSerializer,
 DeletePageSeriallizer,
 SinglePostSerializer,
-SinglePageSerializer
+SinglePageSerializer,
+UserSearchSerializer,
+PostSearchSerializer
 )
 from django.db.models import F, When, Q, Case, Count
 from django.db.models.functions import Coalesce, FirstValue
+from rest_framework import filters
+
 
 class UserRegisterView(CreateAPIView):
     permission_classes = (AllowAny,)
@@ -378,3 +382,19 @@ class GetAuthorProfile(RetrieveAPIView):
             return Response({'ERROR:': str(e)},status=402)
 # GET: author profille with author id
 # 'api/user/author/'
+
+class SearchInUsers(ListAPIView):
+    queryset = UserModel.objects.all()
+    serializer_class = UserSearchSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'first_name']
+# GET: Search between users
+# 'api/user?search="s"'
+
+class SearchInPosts(ListAPIView):
+    queryset = Pages.objects.all()
+    serializer_class = PostSearchSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['page_title', 'post__post_title']
+# GET: Search between Post AND Page titles
+# 'api/post?search="p"'

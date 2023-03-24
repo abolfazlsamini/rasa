@@ -19,7 +19,9 @@ GetFollowersCount,
 GetPostsAuthor,
 Follow,
 UnFollow,
-GetAuthorProfile
+GetAuthorProfile,
+SearchInUsers,
+SearchInPosts
 )
 
 urlpatterns = [
@@ -58,6 +60,11 @@ urlpatterns = [
     path('api/user/follow/', Follow.as_view(), name='Follow'),
     path('api/user/unfollow/', UnFollow.as_view(), name='UnFollow'),
     path('api/user/author', GetAuthorProfile.as_view(), name='GetAuthorProfile'),
+
+
+
+    path('api/user', SearchInUsers.as_view(), name='SearchInUsers'),
+    path('api/post', SearchInPosts.as_view(), name='SearchInPosts'),# TODO change this url
     
 
 

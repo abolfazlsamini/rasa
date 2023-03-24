@@ -80,3 +80,16 @@ class DeletePageSeriallizer(serializers.ModelSerializer):
         fields = ("page_id", "post_id")
 # DELETE: delete page
 
+class UserSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ("id", "username", "first_name")
+# GET: Search between users
+
+class PostSearchSerializer(serializers.ModelSerializer):
+    post_title = serializers.CharField(source='post.post_title')
+    post_id = serializers.CharField(source='post.id')
+    class Meta:
+        model = Pages
+        fields = ("post_id", "post_title", "id", 'page_title')
+# GET: Search between Post AND Page titles
