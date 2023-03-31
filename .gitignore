@@ -1,0 +1,6 @@
+back/user/migrations/
+back/post/migrations/
+back/post/__pycache__/
+back/user/__pycache__/
+back/venv/Lib/site-packages/rest_framework/__pycache__/
+back/startup/__pycache__/

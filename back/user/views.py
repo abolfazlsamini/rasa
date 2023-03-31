@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import UserModel
-from post.models import Post, Pages
+from post.models import Post, Pages, TagsTypes, Tags
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import (
 UserRegisterSerializer, 
@@ -18,7 +18,8 @@ DeletePageSeriallizer,
 SinglePostSerializer,
 SinglePageSerializer,
 UserSearchSerializer,
-PostSearchSerializer
+PostSearchSerializer,
+UserSearchSerializer,
 )
 from django.db.models import F, When, Q, Case, Count
 from django.db.models.functions import Coalesce, FirstValue
@@ -387,7 +388,7 @@ class SearchInUsers(ListAPIView):
     queryset = UserModel.objects.all()
     serializer_class = UserSearchSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username', 'first_name']
+    search_fields = ['id', 'username', 'first_name']
 # GET: Search between users
 # 'api/user?search="s"'
 
@@ -398,3 +399,11 @@ class SearchInPosts(ListAPIView):
     search_fields = ['page_title', 'post__post_title']
 # GET: Search between Post AND Page titles
 # 'api/post?search="p"'
+
+class Test(RetrieveAPIView):
+    queryset = Tags.objects.all()
+
+    def get(self, request):
+        user_post = Post.objects.filter(user = request.user).distinct()
+
+        return Response({'SUCCESS:': str(user_post)}) 

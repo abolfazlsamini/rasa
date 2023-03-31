@@ -93,3 +93,4 @@ class PostSearchSerializer(serializers.ModelSerializer):
         model = Pages
         fields = ("post_id", "post_title", "id", 'page_title')
 # GET: Search between Post AND Page titles
+

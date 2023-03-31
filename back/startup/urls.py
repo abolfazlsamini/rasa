@@ -21,7 +21,8 @@ Follow,
 UnFollow,
 GetAuthorProfile,
 SearchInUsers,
-SearchInPosts
+SearchInPosts,
+Test
 )
 
 urlpatterns = [
@@ -68,4 +69,5 @@ urlpatterns = [
     
 
 
+    path('api/test', Test.as_view(), name='Test'),# TODO change this url
 ]
