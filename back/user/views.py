@@ -405,5 +405,7 @@ class Test(RetrieveAPIView):
 
     def get(self, request):
         user_post = Post.objects.filter(user = request.user).distinct()
+        post2 = Post.objects.get(id = 2)
+        t1 = Post.objects.order_by('id').distinct().values("id", "tags")
 
-        return Response({'SUCCESS:': str(user_post)}) 
+        return Response({'SUCCESS:': str(post2)}) 
